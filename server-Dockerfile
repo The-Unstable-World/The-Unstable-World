@@ -1,0 +1,33 @@
+FROM debian:stretch
+
+USER root
+RUN apt-get update -y && \
+  apt-get -y install build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev \
+  libsqlite3-dev libcurl4-gnutls-dev zlib1g-dev libgmp-dev libjsoncpp-dev git && \
+  apt-get clean && rm -rf /var/cache/apt/archives/* && rm -rf /var/lib/apt/lists/*
+
+RUN git clone --depth 1 https://github.com/minetest/minetest.git /tmp/WORKSPACE/src/minetest && \
+  git clone --depth 1 https://github.com/minetest/minetest_game /tmp/WORKSPACE/src/minetest/games/minetest_game && \
+  rm -fr /tmp/WORKSPACE/src/minetest/games/minetest_game/.git
+
+RUN mkdir /tmp/WORKSPACE/src/minetest/cmakebuild && cd /tmp/WORKSPACE/src/minetest/cmakebuild && \
+  cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -DRUN_IN_PLACE=FALSE \
+  -DBUILD_SERVER=TRUE \
+  -DBUILD_CLIENT=FALSE \
+  -DENABLE_SYSTEM_JSONCPP=1 \
+  .. && \
+  make -j2 && \
+  make install
+
+FROM debian:stretch
+
+USER root
+RUN apt-get update -y && \
+  apt-get -y install libcurl3-gnutls libjsoncpp1 liblua5.1-0 libluajit-5.1-2 libpq5 libsqlite3-0 \
+  libstdc++6 zlib1g libc6 && \
+  apt-get clean && rm -rf /var/cache/apt/archives/* && rm -rf /var/lib/apt/lists/*
+
+COPY --from=0 /usr/local/share/minetest /usr/local/share/minetest
+COPY --from=0 /usr/local/bin/minetestserver /usr/local/bin/minetestserver
+COPY --from=0 /usr/local/share/doc/minetest/minetest.conf.example /etc/minetest/minetest.conf
+
