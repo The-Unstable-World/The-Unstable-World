@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    macos:
+      xcode: "9.0.1"
+    steps:
+      - checkout
+      - run: |
+        brew update
+        brew install freetype gettext irrlicht libogg libvorbis luajit
+        git clone --depth 1 https://github.com/minetest/minetest.git /tmp/WORKSPACE/src/minetest
+        git clone --depth=1 https://github.com/minetest/minetest_game.git /tmp/WORKSPACE/src/minetest/games/minetest_game
+        rm -fr /tmp/WORKSPACE/src/minetest/games/minetest_game/.git
+        pushd /tmp/WORKSPACE/src/minetest
+        cmake . \
+          -DVERSION_EXTRA=dev-$(sw_vers -productVersion) \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DENABLE_FREETYPE=TRUE \
+          -DENABLE_LEVELDB=FALSE \
+          -DENABLE_GETTEXT=TRUE \
+          -DENABLE_REDIS=FALSE \
+          -DBUILD_CLIENT=TRUE \
+          -DBUILD_SERVER=FALSE \
+          -DCUSTOM_GETTEXT_PATH=/usr/local/opt/gettext \
+          -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/lib"
+        make -j2 package
+        mkdir -p /tmp/WORKSPACE/deploy/client/macosx && cp *.zip /tmp/WORKSPACE/deploy/client/macosx
+        popd
+
