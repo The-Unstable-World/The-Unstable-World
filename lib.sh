@@ -49,27 +49,30 @@ install_minetest_debian_builddeps_nosudo(){
   apt install -y build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
 
-install_minetest_windows_vcpkg_and_builddeps(){
-  git clone https://github.com/Microsoft/vcpkg.git ~/vcpkg
-  cd ~/vcpkg
-  ./bootstrap-vcpkg.bat
-  cd -
-  ~/vcpkg/vcpkg install irrlicht zlib curl[winssl] openal-soft libvorbis libogg sqlite3 freetype luajit --triplet x64-windows
-}
-
-build_minetest_client_windows(){
-  cd ./minetest
-  cmake . \
-    -G"Visual Studio 15 2017 Win64" \
-    -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake \
-    -DCMAKE_BUILD_TYPE=Release \
-    -DENABLE_GETTEXT=FALSE \
-    -DENABLE_CURSES=FALSE \
-    -DBUILD_CLIENT=TRUE \
-    -DBUILD_SERVER=FALSE
-  cmake --build . --config Release --target PACKAGE
-  ls -R
-  cd ..
+# reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
+CONFIG_WIN_ARCH=x86_64
+install_minetest_mingw_builddeps__and__build__ubuntu1604(){
+  local WIN_ARCH
+  local WIN_BITS
+  if [ "$CONFIG_WIN_ARCH" = x86_64 ];then
+    WIN_ARCH=x86_64
+    WIN_BITS=64
+  else
+    WIN_ARCH=i686
+    WIN_BITS=32
+  fi
+  get_minetest
+  sudo apt-get install -y p7zip-full wget unzip git cmake gettext
+  wget "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_7.1.1_ubuntu14.04.7z" -O mingw.7z
+  sed -e "s|%PREFIX%|${WIN_ARCH}-w64-mingw32|" -e "s|%ROOTPATH%|/usr/${WIN_ARCH}-w64-mingw32|" < ./minetest/util/travis/toolchain_mingw.cmake.in > ./minetest/util/buildbot/toolchain_mingw.cmake
+  sudo 7z x -y -o/usr mingw.7z
+  EXISTING_MINETEST_DIR="$PWD/minetest/" NO_MINETEST_GAME=1 "./minetest/util/buildbot/buildwin${WIN_BITS}.sh" build
+  unzip ./minetest/_build/minetest-*-win*.zip -d .
+  mv minetest-*-win* minetest-win
+  cp /usr/"${WIN_ARCH}"-w64-mingw32/bin/libgcc*.dll \
+    /usr/"${WIN_ARCH}"-w64-mingw32/bin/libstdc++*.dll \
+    /usr/"${WIN_ARCH}"-w64-mingw32/bin/libwinpthread*.dll minetest-win/bin
+  7z a ./minetest/minetest.zip minetest-win/*
 }
 
 build_minetest_client_osx(){

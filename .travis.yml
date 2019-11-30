@@ -1,7 +1,8 @@
 language: cpp
-matrix:
+jobs:
   include:
-    - os: osx
+    - name: "MacOSX Client"
+      os: osx
       osx_image: xcode8
       script:
         - brew update
@@ -12,9 +13,10 @@ matrix:
         - get_minetest
         - build_minetest_client_osx
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
-        - cp -rv $(echo ./minetest/*.zip | awk '{print $1}') /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
+        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
-    - os: linux
+    - name: "GNU/Linux AMD64 Client"
+      os: linux
       dist: xenial
       script:
         - sudo apt update
@@ -27,7 +29,36 @@ matrix:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
         - cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
         - popd
-    - os: linux
+    - name: "Windows AMD64 Client"
+      os: linux
+      dist: xenial
+      script:
+        - sudo apt update
+        - . ./lib.sh
+        - install_minetest_debian_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - CONFIG_WIN_ARCH=x86_64
+        - install_minetest_mingw_builddeps__and__build__ubuntu1604
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/amd64
+        - cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64
+        - popd
+    - name: "Windows i686 Client"
+      os: linux
+      dist: xenial
+      script:
+        - sudo apt update
+        - . ./lib.sh
+        - install_minetest_debian_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - CONFIG_WIN_ARCH=i686
+        - install_minetest_mingw_builddeps__and__build__ubuntu1604
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/i686
+        - cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/i686
+        - popd
+    - name: "GNU/Linux AMD64 Server"
+      os: linux
       dist: xenial
       script:
         - sudo apt update
@@ -39,17 +70,6 @@ matrix:
         - build_minetest_server_gnulinux_amd64
         - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
-        - popd
-    - os: windows
-      script:
-        - . ./lib.sh
-        - install_minetest_windows_vcpkg_and_builddeps
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - build_minetest_client_windows
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/amd64
-        - echo cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64
         - popd
 
 after_success:
