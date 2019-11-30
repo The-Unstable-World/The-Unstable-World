@@ -13,7 +13,7 @@ matrix:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
-        - build_minetest_osx
+        - build_minetest_client_osx
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
         - cp -rv $(echo minetest/*.zip | awk '{print $1}') /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
@@ -26,8 +26,8 @@ matrix:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
-        - build_minetest_debian
-        - ls minetest
+        - build_minetest_client_debian
+        - ls -lh minetest
         - popd
 
 after_success:

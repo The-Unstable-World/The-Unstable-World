@@ -44,7 +44,11 @@ install_minetest_debian_builddeps(){
   sudo apt install -y build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
 
-build_minetest_osx(){
+install_minetest_debian_builddeps_nosudo(){
+  apt install -y build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
+}
+
+build_minetest_client_osx(){
   pushd ./minetest
   cmake . \
     -DVERSION_EXTRA="dev-$(sw_vers -productVersion)" \
@@ -61,16 +65,21 @@ build_minetest_osx(){
   popd
 }
 
-build_minetest_debian(){
+build_minetest_client_debian(){
   pushd ./minetest
-  cmake . -DCMAKE_INSTALL_PREFIX=/usr \
+  cmake . \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_CLIENT=TRUE \
     -DBUILD_SERVER=FALSE
   make -j2
-  make install DESTDIR=AppDir
+  make install DESTDIR=minetest.AppDir
   wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
   chmod +x linuxdeploy-x86_64.AppImage
-  ./linuxdeploy-x86_64.AppImage --appdir AppDir
+  ./linuxdeploy-x86_64.AppImage --appdir minetest.AppDir
+  wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+  chmod +x appimagetool-x86_64.AppImage
+  ./appimagetool-x86_64.AppImage minetest.AppDir minetest.AppImage
   popd
 }
 
