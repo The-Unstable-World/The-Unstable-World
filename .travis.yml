@@ -41,10 +41,6 @@ matrix:
         - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - popd
     - os: windows
-      dist: xenial
-      cache:
-        directories:
-          - $HOME/vcpkg
       script:
         - . ./lib.sh
         - install_minetest_windows_vcpkg_and_builddeps
