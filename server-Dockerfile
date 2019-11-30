@@ -16,5 +16,7 @@ RUN cd /tmp/WORKSPACE && \
 
 FROM alpine
 
+ENV APPIMAGE_EXTRACT_AND_RUN=1
+
 COPY --from=0 /tmp/WORKSPACE/minetest/minetestserver.AppImage /usr/local/bin/minetest
 
