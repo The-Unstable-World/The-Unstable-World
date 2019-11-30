@@ -25,6 +25,7 @@ get_mods(){
 
   for x in \
     https://gitlab.com/VanessaE/homedecor_modpack.git \
+    https://github.com/stujones11/minetest-3d_armor.git \
   ;do
     git clone --depth 1 "$x"
     for subdir in "$x"/*;do
@@ -65,7 +66,7 @@ build_minetest_client_osx(){
   popd
 }
 
-build_minetest_client_debian(){
+build_minetest_client_gnulinux_amd64(){
   pushd ./minetest
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
@@ -83,3 +84,21 @@ build_minetest_client_debian(){
   popd
 }
 
+build_minetest_server_gnulinux_amd64(){
+  pushd ./minetest
+  cmake . \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SERVER=TRUE \
+    -DBUILD_CLIENT=FALSE
+  make -j2
+  make install DESTDIR=minetestserver.AppDir
+  wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+  chmod +x linuxdeploy-x86_64.AppImage
+  sed -i 's/^Exec=minetest$/Exec=minetestserver/' ./minetestserver.AppDir/usr/share/applications/net.minetest.minetest.desktop
+  ./linuxdeploy-x86_64.AppImage --appdir minetestserver.AppDir
+  wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+  chmod +x appimagetool-x86_64.AppImage
+  ./appimagetool-x86_64.AppImage minetestserver.AppDir minetestserver.AppImage
+  popd
+}

@@ -23,9 +23,22 @@ matrix:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
-        - build_minetest_client_debian
+        - build_minetest_client_gnulinux_amd64
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
         - cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
+        - popd
+    - os: linux
+      dist: xenial
+      script:
+        - sudo apt update
+        - . ./lib.sh
+        - install_minetest_debian_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - build_minetest_server_gnulinux_amd64
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
+        - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - popd
 
 after_success:
