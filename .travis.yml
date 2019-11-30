@@ -62,3 +62,15 @@ matrix:
         - ./linuxdeploy-x86_64.AppImage --appdir AppDir --output minetest.AppImage
         - popd
 
+after_success:
+  - |
+    if [ -n "${GITHUB_OAUTH_TOKEN}" ] ;then
+      git config --global user.email tsao-chi@the-lingo.org
+      git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
+      git clone --depth 1 https://${GITHUB_OAUTH_TOKEN}@github.com/The-Unstable-World/binary.git /tmp/WORKSPACE/deploy_repo
+      cd /tmp/WORKSPACE/deploy_repo
+      cp -rv /tmp/WORKSPACE/deploy/* ./
+      git add .
+      git commit -m 'deploy' || true
+      git push --force
+    fi
