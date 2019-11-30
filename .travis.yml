@@ -64,15 +64,15 @@ matrix:
 
 deploy:
   provider: script
-    script: |
-      - git config --global user.email tsao-chi@the-lingo.org
-      - git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
-      - git clone --depth 1 https://${GITHUB_OAUTH_TOKEN}@github.com/The-Unstable-World/binary.git /tmp/WORKSPACE/deploy_repo
-      - cd /tmp/WORKSPACE/deploy_repo
-      - cp -rv /tmp/WORKSPACE/deploy/* ./
-      - git add .
-      - git commit -m '更'
-      - git push --force
+    script: - |
+      git config --global user.email tsao-chi@the-lingo.org
+      git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
+      git clone --depth 1 https://${GITHUB_OAUTH_TOKEN}@github.com/The-Unstable-World/binary.git /tmp/WORKSPACE/deploy_repo
+      cd /tmp/WORKSPACE/deploy_repo
+      cp -rv /tmp/WORKSPACE/deploy/* ./
+      git add .
+      git commit -m '更'
+      git push --force
     on:
       branch: master
 
