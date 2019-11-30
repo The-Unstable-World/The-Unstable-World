@@ -15,11 +15,12 @@ matrix:
         - get_minetest
         - build_minetest_osx
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
-        - cp -rv minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx
+        - cp -rv $(echo minetest/*.zip | awk '{print $1}') /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
     - os: linux
       dist: xenial
       script:
+        - sudo apt update
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
