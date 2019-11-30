@@ -7,69 +7,36 @@ matrix:
         - brew update
         - brew install freetype gettext irrlicht libogg libvorbis luajit
       script:
-        - git clone --depth 1 https://github.com/minetest/minetest.git /tmp/WORKSPACE/src/minetest
-        - git clone --depth=1 https://github.com/minetest/minetest_game.git /tmp/WORKSPACE/src/minetest/games/minetest_game
-        - rm -fr /tmp/WORKSPACE/src/minetest/games/minetest_game/.git
-        - pushd /tmp/WORKSPACE/src/minetest
-        - cmake .
-          -DVERSION_EXTRA=dev-$(sw_vers -productVersion)
-          -DCMAKE_BUILD_TYPE=Release
-          -DENABLE_FREETYPE=TRUE
-          -DENABLE_LEVELDB=FALSE
-          -DENABLE_GETTEXT=TRUE
-          -DENABLE_REDIS=FALSE
-          -DBUILD_CLIENT=TRUE
-          -DBUILD_SERVER=FALSE
-          -DCUSTOM_GETTEXT_PATH=/usr/local/opt/gettext
-          -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/lib"
-        - make -j2 package
-        - mkdir -p /tmp/WORKSPACE/deploy/client/macosx && cp *.zip /tmp/WORKSPACE/deploy/client/macosx
+        - brew update
+        - . ./lib.sh
+        - install_minetest_osx_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - build_minetest_osx
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
+        - cp -rv minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx
         - popd
     - os: linux
       dist: xenial
-      addons:
-        apt:
-          packages:
-            - build-essential
-            - libirrlicht-dev
-            - cmake
-            - libbz2-dev
-            - libpng-dev
-            - libjpeg-dev
-            - libxxf86vm-dev
-            - libgl1-mesa-dev
-            - libsqlite3-dev
-            - libogg-dev
-            - libvorbis-dev
-            - libopenal-dev
-            - libcurl4-gnutls-dev
-            - libfreetype6-dev
-            - zlib1g-dev
-            - libgmp-dev
-            - libjsoncpp-dev
       script:
-        - git clone --depth 1 https://github.com/minetest/minetest.git /tmp/WORKSPACE/src/minetest
-        - git clone --depth=1 https://github.com/minetest/minetest_game.git /tmp/WORKSPACE/src/minetest/games/minetest_game
-        - rm -fr /tmp/WORKSPACE/src/minetest/games/minetest_game/.git
-        - pushd /tmp/WORKSPACE/src/minetest
-        - cmake . -DCMAKE_INSTALL_PREFIX=/usr
-        - make -j2
-        - make install DESTDIR=/tmp/WORKSPACE/AppDir
-        - popd
-        - pushd /tmp/WORKSPACE/
-        - wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-        - chmod +x linuxdeploy-x86_64.AppImage
-        - ./linuxdeploy-x86_64.AppImage --appdir AppDir --output minetest.AppImage
+        - . ./lib.sh
+        - install_minetest_debian_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - build_minetest_debian
+        - ls minetest
         - popd
 
 after_success:
   - |
-    if [ -n "${GITHUB_OAUTH_TOKEN}" ] ;then
+    if [ -n "${GITHUB_OAUTH_TOKEN}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
       git config --global user.email tsao-chi@the-lingo.org
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
       git clone --depth 1 https://${GITHUB_OAUTH_TOKEN}@github.com/The-Unstable-World/binary.git /tmp/WORKSPACE/deploy_repo
       cd /tmp/WORKSPACE/deploy_repo
-      cp -rv /tmp/WORKSPACE/deploy/* ./
+      cp -rv /tmp/WORKSPACE/DEPLOY/* ./
       git add .
       git commit -m 'deploy' || true
       git push --force
