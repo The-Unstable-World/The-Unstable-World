@@ -65,6 +65,7 @@ jobs:
         - chmod +x linuxdeploy-x86_64.AppImage
         - ./linuxdeploy-x86_64.AppImage --appdir AppDir --output minetest.AppImage
         - popd
+
 deploy:
   provider: script
     script:
