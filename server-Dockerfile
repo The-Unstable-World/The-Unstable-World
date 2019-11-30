@@ -9,7 +9,7 @@ ADD ./lib.sh /tmp/WORKSPACE/lib.sh
 RUN cd /tmp/WORKSPACE && \
   . ./lib.sh && \
   apt update && \
-  apt install -y git wget && \
+  apt install -y git wget file && \
   install_minetest_debian_builddeps_nosudo && \
   get_minetest && \
   build_minetest_server_gnulinux_amd64
