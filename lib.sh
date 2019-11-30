@@ -60,12 +60,11 @@ install_minetest_windows_vcpkg_and_builddeps(){
 }
 
 build_minetest_client_windows(){
-  mkdir ./minetest/build
-  cd ./minetest/build
-  cmake .. -G"Visual Studio 15 2017 Win64" -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_GETTEXT=0 -DENABLE_CURSES=0
-  cmake --build .. --config Release
-  7z a ../minetest.zip .
-  cd ../..
+  cd ./minetest
+  cmake . -G"Visual Studio 15 2017 Win64" -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_GETTEXT=0 -DENABLE_CURSES=0
+  cmake --build . --config Release -- -j2
+  7z a ./minetest.zip .
+  cd ..
 }
 
 build_minetest_client_osx(){
