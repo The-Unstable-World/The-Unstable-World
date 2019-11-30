@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 get_minetest(){
   git clone --depth 1 https://github.com/minetest/minetest.git ./minetest
@@ -50,7 +50,7 @@ install_minetest_debian_builddeps_nosudo(){
 }
 
 build_minetest_client_osx(){
-  pushd ./minetest
+  cd ./minetest
   cmake . \
     -DVERSION_EXTRA="dev-$(sw_vers -productVersion)" \
     -DCMAKE_BUILD_TYPE=Release \
@@ -63,11 +63,11 @@ build_minetest_client_osx(){
     -DCUSTOM_GETTEXT_PATH=/usr/local/opt/gettext \
     -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/lib"
   make -j2 package
-  popd
+  cd ..
 }
 
 build_minetest_client_gnulinux_amd64(){
-  pushd ./minetest
+  cd ./minetest
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
@@ -81,11 +81,11 @@ build_minetest_client_gnulinux_amd64(){
   wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
   chmod +x appimagetool-x86_64.AppImage
   ./appimagetool-x86_64.AppImage minetest.AppDir minetest.AppImage
-  popd
+  cd ..
 }
 
 build_minetest_server_gnulinux_amd64(){
-  pushd ./minetest
+  cd ./minetest
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
@@ -100,5 +100,5 @@ build_minetest_server_gnulinux_amd64(){
   wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
   chmod +x appimagetool-x86_64.AppImage
   ./appimagetool-x86_64.AppImage minetestserver.AppDir minetestserver.AppImage
-  popd
+  cd ..
 }
