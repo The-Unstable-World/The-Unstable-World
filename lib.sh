@@ -49,6 +49,25 @@ install_minetest_debian_builddeps_nosudo(){
   apt install -y build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
 
+install_vcpkg(){
+  git clone https://github.com/Microsoft/vcpkg.git ~/vcpkg
+  cd ~/vcpkg
+  ./bootstrap-vcpkg.bat
+  cd -
+}
+
+install_minetest_windows_builddeps(){
+  ~/vcpkg/vcpkg install irrlicht zlib curl[winssl] openal-soft libvorbis libogg sqlite3 freetype luajit --triplet x64-windows
+}
+
+build_minetest_client_windows(){
+  cd ./minetest
+  cmake . -G"Visual Studio 15 2017 Win64" -DCMAKE_TOOLCHAIN_FILE=~/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_GETTEXT=0 -DENABLE_CURSES=0
+  cmake --build . --config Release
+  make -j2 package
+  cd ..
+}
+
 build_minetest_client_osx(){
   cd ./minetest
   cmake . \

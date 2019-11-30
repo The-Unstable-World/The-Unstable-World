@@ -40,6 +40,18 @@ matrix:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - popd
+    - os: windows
+      dist: xenial
+      script:
+        - . ./lib.sh
+        - install_vcpkg
+        - install_minetest_windows_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - build_minetest_client_windows
+        - ls ./minetest
+        - popd
 
 after_success:
   - |
