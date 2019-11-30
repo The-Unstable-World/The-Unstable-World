@@ -1,10 +1,7 @@
 language: cpp
-stages:
-  - build
-jobs:
+matrix:
   include:
-    - stage: build
-      os: osx
+    - os: osx
       osx_image: xcode9.2
       install:
         - brew update
@@ -28,8 +25,7 @@ jobs:
         - make -j2 package
         - mkdir -p /tmp/WORKSPACE/deploy/client/macosx && cp *.zip /tmp/WORKSPACE/deploy/client/macosx
         - popd
-    - stage: build
-      os: linux
+    - os: linux
       dist: xenial
       addons:
         apt:
