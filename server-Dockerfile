@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stable
 
 USER root
 
@@ -14,9 +14,9 @@ RUN cd /tmp/WORKSPACE && \
   get_minetest && \
   build_minetest_server_gnulinux_amd64
 
-FROM alpine
+FROM debian:stable
 
 ENV APPIMAGE_EXTRACT_AND_RUN=1
 
-COPY --from=0 /tmp/WORKSPACE/minetest/minetestserver.AppImage /usr/local/bin/minetest
+COPY --from=0 /tmp/WORKSPACE/minetest/minetestserver.AppImage /usr/local/bin/minetestserver
 
