@@ -15,7 +15,7 @@ matrix:
         - get_minetest
         - build_minetest_client_osx
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
-        - cp -rv $(echo minetest/*.zip | awk '{print $1}') /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
+        - cp -rv $(echo ./minetest/*.zip | awk '{print $1}') /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
     - os: linux
       dist: xenial
@@ -27,7 +27,8 @@ matrix:
         - pushd /tmp/WORKSPACE
         - get_minetest
         - build_minetest_client_debian
-        - ls -lh minetest
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
+        - cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
         - popd
 
 after_success:

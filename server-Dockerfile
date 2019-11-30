@@ -9,6 +9,7 @@ RUN cd /tmp/WORKSPACE && \
   apt update && \
   install_minetest_debian_builddeps_nosudo && \
   get_minetest && \
+  cd ./minetest && \
   cmake . -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_BUILD_TYPE=Release -DRUN_IN_PLACE=FALSE \
   -DBUILD_SERVER=TRUE \
   -DBUILD_CLIENT=FALSE \
