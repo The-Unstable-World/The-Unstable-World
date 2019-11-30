@@ -42,15 +42,18 @@ matrix:
         - popd
     - os: windows
       dist: xenial
+      cache:
+        directories:
+          - $HOME/vcpkg
       script:
         - . ./lib.sh
-        - install_vcpkg
-        - install_minetest_windows_builddeps
+        - install_minetest_windows_vcpkg_and_builddeps
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
         - build_minetest_client_windows
-        - ls ./minetest
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/amd64
+        - cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64
         - popd
 
 after_success:
