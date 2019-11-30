@@ -2,10 +2,7 @@ language: cpp
 matrix:
   include:
     - os: osx
-      osx_image: xcode9.2
-      install:
-        - brew update
-        - brew install freetype gettext irrlicht libogg libvorbis luajit
+      osx_image: xcode8
       script:
         - brew update
         - . ./lib.sh
