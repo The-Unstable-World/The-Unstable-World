@@ -2,6 +2,8 @@ FROM debian:stretch
 
 USER root
 
+ENV APPIMAGE_EXTRACT_AND_RUN=1
+
 ADD ./lib.sh /tmp/WORKSPACE/lib.sh
 
 RUN cd /tmp/WORKSPACE && \
