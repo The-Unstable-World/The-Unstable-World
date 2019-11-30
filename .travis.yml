@@ -49,7 +49,7 @@ matrix:
         - get_minetest
         - build_minetest_client_windows
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/amd64
-        - cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64
+        - echo cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64
         - popd
 
 after_success:

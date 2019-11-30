@@ -67,8 +67,7 @@ build_minetest_client_windows(){
     -DENABLE_CURSES=FALSE \
     -DBUILD_CLIENT=TRUE \
     -DBUILD_SERVER=FALSE
-  cmake --build . --config Release
-  mingw32-make package
+  cmake --build . --config Release --target PACKAGE
   ls -R
   cd ..
 }
