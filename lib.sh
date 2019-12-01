@@ -31,6 +31,7 @@ mods_modpack(){
     https://gitlab.com/VanessaE/homedecor_modpack.git \
     https://github.com/stujones11/minetest-3d_armor.git \
     http://git.bananach.space/advtrains.git \
+    https://github.com/minetest-mods/mesecons.git \
 
 }
 
