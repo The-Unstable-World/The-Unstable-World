@@ -18,6 +18,11 @@ mods_mod(){
     https://notabug.org/TenPlus1/mobs_npc.git \
     https://notabug.org/TenPlus1/mob_horse.git \
     https://github.com/minetest-mods/moreblocks.git \
+    https://github.com/paramat/snowdrift.git \
+    https://gitlab.com/VanessaE/biome_lib.git \
+    https://gitlab.com/VanessaE/moretrees.git \
+    https://gitlab.com/VanessaE/pipeworks.git \
+    https://repo.or.cz/minetest_hudbars.git \
 
 }
 
@@ -25,17 +30,16 @@ mods_modpack(){
   echo \
     https://gitlab.com/VanessaE/homedecor_modpack.git \
     https://github.com/stujones11/minetest-3d_armor.git \
+    http://git.bananach.space/advtrains.git \
 
 }
 
 get_mods__and__gen_world_mt_config(){
-  > WORLD_MT_CONFIG
   for x in $(mods_mod);do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
     git clone --depth 1 "$x"
     rm -fr "$x_name"/.git
-    echo "load_mod_${x_name} = true" >> WORLD_MT_CONFIG
   done
 
   for x in $(mods_modpack);do
@@ -43,12 +47,26 @@ get_mods__and__gen_world_mt_config(){
     local x_name="${x_base%.git}"
     git clone --depth 1 "$x"
     for subdir in "$x_name"/*;do
-      if [ -d "$subdir" ];then
+      if [ -f "$subdir/mod.conf" ];then
         mv "$subdir" ./
-        echo "load_mod_${subdir##*/} = true" >> WORLD_MT_CONFIG
       fi
     done
     rm -fr "$x_name"
+  done
+
+  > WORLD_MT_CONFIG
+  for x in *;do
+    if [ -f "$x/mod.conf" ];then
+      local name=$(grep '^name[ \t]*=' "$x/mod.conf" | head -1 | sed 's/^.*=[ \t]*\([a-zA-Z_]*\).*$/\1/')
+      echo "load_mod_${name} = true" >> WORLD_MT_CONFIG
+      if [ "$x" != "$name" ];then
+        mv "$x" "$name"
+      fi
+    elif [ -f "$x" ];then
+      :
+    else
+      rm -fr "$x"
+    fi
   done
 }
 
