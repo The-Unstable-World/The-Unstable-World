@@ -78,13 +78,13 @@ jobs:
         - . ./lib.sh
         - mkdir -p /tmp/WORKSPACE/mods
         - pushd /tmp/WORKSPACE/mods
-        - get_mods__and__gen_world_mt_config
+        - get_mods__and__gen_WORLD-MT-CONFIG
         - touch modpack.txt
-        - mv WORLD_MT_CONFIG ..
+        - mv WORLD-MT-CONFIG ..
         - zip -r ../modpack.zip .
         - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
         - cp ../modpack.zip /tmp/WORKSPACE/DEPLOY/modpack
-        - cp ../WORLD_MT_CONFIG /tmp/WORKSPACE/DEPLOY/modpack
+        - cp ../WORLD-MT-CONFIG /tmp/WORKSPACE/DEPLOY/modpack
         - popd
 
 after_success:

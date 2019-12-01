@@ -38,7 +38,7 @@ mods_modpack(){
 
 }
 
-get_mods__and__gen_world_mt_config(){
+get_mods__and__gen_WORLD-MT-CONFIG(){
   for x in $(mods_mod);do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
@@ -57,17 +57,17 @@ get_mods__and__gen_world_mt_config(){
     rm -fr MODPACK-TMP
   done
 
-  > WORLD_MT_CONFIG
+  > WORLD-MT-CONFIG
   for x in *;do
     if [ -f "$x/mod.conf" ];then
       local name=$(grep '^name[ \t]*=' "$x/mod.conf" | head -1 | sed 's/^.*=[ \t]*\([a-zA-Z_]*\).*$/\1/')
-      echo "load_mod_${name} = true" >> WORLD_MT_CONFIG
+      echo "load_mod_${name} = true" >> WORLD-MT-CONFIG
       if [ "$x" != "$name" ];then
         mv "$x" "$name"
       fi
     elif [ -f "$x/init.lua" ];then
-      echo "load_mod_${x} = true" >> WORLD_MT_CONFIG
-    elif [ "$x" = WORLD_MT_CONFIG ];then
+      echo "load_mod_${x} = true" >> WORLD-MT-CONFIG
+    elif [ "$x" = WORLD-MT-CONFIG ];then
       :
     else
       rm -fr "$x"
