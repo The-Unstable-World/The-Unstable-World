@@ -22,6 +22,9 @@ mods_mod(){
     https://gitlab.com/VanessaE/biome_lib.git \
     https://gitlab.com/VanessaE/moretrees.git \
     https://gitlab.com/VanessaE/pipeworks.git \
+    https://gitlab.com/VanessaE/unifieddyes.git \
+    https://gitlab.com/VanessaE/basic_materials.git \
+    https://gitlab.com/VanessaE/signs_lib.git \
     https://repo.or.cz/minetest_hudbars.git \
 
 }
