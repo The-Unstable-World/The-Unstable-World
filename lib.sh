@@ -51,7 +51,7 @@ get_mods__and__gen_world_mt_config(){
     local x_name="${x_base%.git}"
     git clone "$x"
     for subdir in "$x_name"/*;do
-      if [ -f "$subdir/mod.conf" ];then
+      if [ -f "$subdir/mod.conf" ] || [ -f "$subdir/init.lua" ];then
         mv "$subdir" ./
       fi
     done
@@ -66,7 +66,7 @@ get_mods__and__gen_world_mt_config(){
       if [ "$x" != "$name" ];then
         mv "$x" "$name"
       fi
-    elif [ -f "$x" ];then
+    elif [ -f "$x" ] || [ -f "$x/init.lua" ];then
       :
     else
       rm -fr "$x"
