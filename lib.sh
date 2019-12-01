@@ -66,7 +66,9 @@ get_mods__and__gen_world_mt_config(){
       if [ "$x" != "$name" ];then
         mv "$x" "$name"
       fi
-    elif [ -f "$x" ] || [ -f "$x/init.lua" ];then
+    elif [ -f "$x/init.lua" ];then
+      echo "load_mod_${x} = true" >> WORLD_MT_CONFIG
+    elif [ -f "$x" ];then
       :
     else
       rm -fr "$x"
