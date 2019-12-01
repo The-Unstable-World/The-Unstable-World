@@ -3,7 +3,7 @@ jobs:
   include:
     - name: "MacOSX Client"
       os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
       script:
         - brew update
         - . ./lib.sh
