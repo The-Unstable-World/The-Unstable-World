@@ -38,14 +38,14 @@ get_mods__and__gen_world_mt_config(){
   for x in $(mods_mod);do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
-    git clone --depth 1 "$x"
+    git clone "$x"
     rm -fr "$x_name"/.git
   done
 
   for x in $(mods_modpack);do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
-    git clone --depth 1 "$x"
+    git clone "$x"
     for subdir in "$x_name"/*;do
       if [ -f "$subdir/mod.conf" ];then
         mv "$subdir" ./
