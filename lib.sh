@@ -47,15 +47,14 @@ get_mods__and__gen_world_mt_config(){
   done
 
   for x in $(mods_modpack);do
-    local x_base="${x##*/}"
-    local x_name="${x_base%.git}"
-    git clone "$x"
-    for subdir in "$x_name"/*;do
+    rm -fr MODPACK-TMP
+    git clone "$x" MODPACK-TMP
+    for subdir in MODPACK-TMP/*;do
       if [ -f "$subdir/mod.conf" ] || [ -f "$subdir/init.lua" ];then
         mv "$subdir" ./
       fi
     done
-    rm -fr "$x_name"
+    rm -fr MODPACK-TMP
   done
 
   > WORLD_MT_CONFIG
