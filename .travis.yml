@@ -71,6 +71,21 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - popd
+    - name: "modpack"
+      os: linux
+      dist: xenial
+      script:
+        - . ./lib.sh
+        - mkdir -p /tmp/WORKSPACE/mods
+        - pushd /tmp/WORKSPACE/mods
+        - get_mods__and__gen_world_mt_config
+        - touch modpack.txt
+        - mv WORLD_MT_CONFIG ..
+        - zip -r ../modpack.zip .
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
+        - cp ../modpack.zip /tmp/WORKSPACE/DEPLOY/modpack
+        - cp ../WORLD_MT_CONFIG /tmp/WORKSPACE/DEPLOY/modpack
+        - popd
 
 after_success:
   - |

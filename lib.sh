@@ -6,8 +6,8 @@ get_minetest(){
   rm -fr ./minetest/games/minetest_game/.git
 }
 
-get_mods(){
-  for x in \
+mods_mod(){
+  echo \
     https://github.com/D00Med/vehicles.git \
     https://gitlab.com/rubenwardy/awards.git \
     https://github.com/minetest-mods/craftguide.git \
@@ -18,22 +18,37 @@ get_mods(){
     https://notabug.org/TenPlus1/mobs_npc.git \
     https://notabug.org/TenPlus1/mob_horse.git \
     https://github.com/minetest-mods/moreblocks.git \
-  ;do
-    git clone --depth 1 "$x"
-    rm -fr "$x"/.git
-  done
 
-  for x in \
+}
+
+mods_modpack(){
+  echo \
     https://gitlab.com/VanessaE/homedecor_modpack.git \
     https://github.com/stujones11/minetest-3d_armor.git \
-  ;do
+
+}
+
+get_mods__and__gen_world_mt_config(){
+  > WORLD_MT_CONFIG
+  for x in $(mods_mod);do
+    local x_base="${x##*/}"
+    local x_name="${x_base%.git}"
     git clone --depth 1 "$x"
-    for subdir in "$x"/*;do
+    rm -fr "$x_name"/.git
+    echo "load_mod_${x_name} = true" >> WORLD_MT_CONFIG
+  done
+
+  for x in $(mods_modpack);do
+    local x_base="${x##*/}"
+    local x_name="${x_base%.git}"
+    git clone --depth 1 "$x"
+    for subdir in "$x_name"/*;do
       if [ -d "$subdir" ];then
         mv "$subdir" ./
+        echo "load_mod_${subdir##*/} = true" >> WORLD_MT_CONFIG
       fi
     done
-    rm -fr "$x"
+    rm -fr "$x_name"
   done
 }
 
