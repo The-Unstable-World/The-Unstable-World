@@ -95,10 +95,11 @@ jobs:
         - rm ~/sdk-tools-linux.zip
         - export ANDROID_HOME="$HOME/android-sdk-linux"
         - export PATH="$PATH:$ANDROID_HOME/tools/bin"
-        - wget --quiet -O ~/android-ndk-r16b.zip https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip
-        - unzip -q ~/android-ndk-r16b.zip -d ~
-        - rm ~/android-ndk-r16b.zip
-        - export ANDROID_NDK_HOME="$HOME/android-ndk-r16b"
+        - ndk_version=r16b
+        - wget --quiet -O "~/android-ndk-${ndk_version}.zip" "https://dl.google.com/android/repository/android-ndk-${ndk_version}-linux-x86_64.zip"
+        - unzip -q "~/android-ndk-${ndk_version}.zip" -d ~
+        - rm "~/android-ndk-${ndk_version}.zip"
+        - export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
         - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
         - echo y | sdkmanager "build-tools;29.0.2" >/dev/null
         - echo y | sdkmanager "platforms;android-29" >/dev/null
@@ -114,6 +115,8 @@ jobs:
         - pushd ./minetest/build/android
         - make release -j2 2>&1 | cat
         - popd
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
+        - cp ./minetest/build/outputs/apk/release/Minetest-release.apk /tmp/WORKSPACE/DEPLOY/client/android
         - popd
 
 after_success:
