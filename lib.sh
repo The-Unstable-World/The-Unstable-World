@@ -126,7 +126,7 @@ build_minetest_client_osx(){
     -DBUILD_SERVER=FALSE \
     -DCUSTOM_GETTEXT_PATH=/usr/local/opt/gettext \
     -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/lib"
-  make -j2 package
+  make -j4 package
   cd ..
 }
 
@@ -137,7 +137,7 @@ build_minetest_client_gnulinux_amd64(){
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_CLIENT=TRUE \
     -DBUILD_SERVER=FALSE
-  make -j2
+  make -j4
   make install DESTDIR=minetest.AppDir
   wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
   chmod +x linuxdeploy-x86_64.AppImage
@@ -155,7 +155,7 @@ build_minetest_server_gnulinux_amd64(){
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_SERVER=TRUE \
     -DBUILD_CLIENT=FALSE
-  make -j2
+  make -j4
   make install DESTDIR=minetestserver.AppDir
   wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
   chmod +x linuxdeploy-x86_64.AppImage

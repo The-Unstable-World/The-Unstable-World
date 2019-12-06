@@ -1,6 +1,21 @@
 language: cpp
 jobs:
   include:
+    - name: "modpack"
+      os: linux
+      dist: xenial
+      script:
+        - . ./lib.sh
+        - mkdir -p /tmp/WORKSPACE/mods
+        - pushd /tmp/WORKSPACE/mods
+        - get_mods__and__gen_WORLD-MT-CONFIG
+        - touch modpack.txt
+        - mv WORLD-MT-CONFIG ..
+        - zip -r ../modpack.zip .
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
+        - cp ../modpack.zip /tmp/WORKSPACE/DEPLOY/modpack
+        - cp ../WORLD-MT-CONFIG /tmp/WORKSPACE/DEPLOY/modpack
+        - popd
     - name: "MacOSX Client"
       os: osx
       osx_image: xcode8.3
@@ -71,20 +86,34 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - popd
-    - name: "modpack"
+    - name: "Android Client"
       os: linux
       dist: xenial
+      install:
+        - wget -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+        - unzip ~/sdk-tools-linux.zip -d ~/android-sdk-linux
+        - rm ~/sdk-tools-linux.zip
+        - export ANDROID_HOME="$HOME/android-sdk-linux"
+        - export PATH="$PATH:$ANDROID_HOME/tools/bin"
+        - wget -O ~/android-ndk-r16b.zip https://dl.google.com/android/repository/android-ndk-r16b-linux-x86_64.zip
+        - unzip ~/android-ndk-r16b.zip -d ~
+        - rm ~/android-ndk-r16b.zip
+        - export ANDROID_NDK_HOME="$HOME/android-ndk-r16b"
+        - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+        - echo y | sdkmanager "build-tools;29.0.2" >/dev/null
+        - echo y | sdkmanager "platforms;android-29" >/dev/null
       script:
         - . ./lib.sh
-        - mkdir -p /tmp/WORKSPACE/mods
-        - pushd /tmp/WORKSPACE/mods
-        - get_mods__and__gen_WORLD-MT-CONFIG
-        - touch modpack.txt
-        - mv WORLD-MT-CONFIG ..
-        - zip -r ../modpack.zip .
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
-        - cp ../modpack.zip /tmp/WORKSPACE/DEPLOY/modpack
-        - cp ../WORLD-MT-CONFIG /tmp/WORKSPACE/DEPLOY/modpack
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - git clone -b stable-5 --depth=1 https://github.com/minetest/minetest.git ./minetest
+        - git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game
+        - rm -fr ./minetest/games/minetest_game/.git
+        - echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties
+        - echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties
+        - pushd ./minetest/build/android
+        - make release -j4
+        - popd
         - popd
 
 after_success:
