@@ -119,7 +119,7 @@ jobs:
         - popd
         - popd
         - cd /
-        - find -name Minetest-release.apk
+        - find -name Minetest-release.apk 2>/dev/null
 
 after_success:
   - |
