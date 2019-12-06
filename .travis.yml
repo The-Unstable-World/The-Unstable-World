@@ -114,10 +114,12 @@ jobs:
         - echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties
         - pushd ./minetest/build/android
         - make release -j2 2>&1 | cat
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
-        - cp ./build/outputs/apk/release/Minetest-release.apk /tmp/WORKSPACE/DEPLOY/client/android
+        - #mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
+        - #cp ./build/outputs/apk/release/Minetest-release.apk /tmp/WORKSPACE/DEPLOY/client/android
         - popd
         - popd
+        - cd /
+        - find -name Minetest-release.apk
 
 after_success:
   - |
