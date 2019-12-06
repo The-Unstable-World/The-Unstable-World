@@ -6,13 +6,13 @@ ENV APPIMAGE_EXTRACT_AND_RUN=1
 
 ADD ./lib.sh /tmp/WORKSPACE/lib.sh
 
-RUN cd /tmp/WORKSPACE && \
+RUN bash -c 'cd /tmp/WORKSPACE && \
   . ./lib.sh && \
   apt update && \
   apt install -y git wget file && \
   install_minetest_debian_builddeps_nosudo && \
   get_minetest && \
-  build_minetest_server_gnulinux_amd64
+  build_minetest_server_gnulinux_amd64'
 
 FROM debian:stable-slim
 
