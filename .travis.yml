@@ -19,7 +19,7 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt update && sudo apt full-upgrade -y
+        - sudo apt-get update && (sudo apt-get dist-upgrade -y || true)
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
@@ -33,7 +33,7 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt update
+        - sudo apt-get update
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
@@ -47,7 +47,7 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt update
+        - sudo apt-get update
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
@@ -61,7 +61,7 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt update && sudo apt full-upgrade -y
+        - sudo apt-get update && (sudo apt-get dist-upgrade -y || true)
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
