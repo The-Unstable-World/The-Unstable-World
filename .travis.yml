@@ -34,7 +34,7 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 && sudo apt-get dist-upgrade -y
+        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
@@ -76,7 +76,7 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 && sudo apt-get dist-upgrade -y
+        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
         - . ./lib.sh
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
@@ -107,7 +107,7 @@ jobs:
         - . ./lib.sh
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
-        - git clone -b stable-5 --depth=1 https://github.com/minetest/minetest.git ./minetest
+        - git clone -b stable-5 --depth=1 https://github.com/minetest/minetest.git ./minetest # master was broken
         - git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game
         - rm -fr ./minetest/games/minetest_game/.git
         - echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties
