@@ -1,5 +1,3 @@
-#!/bin/sh
-
 get_minetest(){
   git clone --depth=1 https://github.com/minetest/minetest.git ./minetest
   git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game
