@@ -18,11 +18,12 @@ jobs:
         - popd
     - name: "MacOSX Client"
       os: osx
-      osx_image: xcode8.3
-      script:
+      osx_image: xcode8
+      install:
         - brew update
         - . ./lib.sh
         - install_minetest_osx_builddeps
+      script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
@@ -33,10 +34,11 @@ jobs:
     - name: "GNU/Linux AMD64 Client"
       os: linux
       dist: xenial
-      script:
+      install:
         - . ./lib.sh
         - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT "travis ci bug") && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
         - install_minetest_debian_builddeps
+      script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
@@ -47,10 +49,11 @@ jobs:
     - name: "GNU/Linux AMD64 Server"
       os: linux
       dist: xenial
-      script:
+      install:
         - . ./lib.sh
         - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT "travis ci bug") && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
         - install_minetest_debian_builddeps
+      script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
@@ -61,10 +64,10 @@ jobs:
     - name: "Windows AMD64 Client"
       os: linux
       dist: xenial
-      script:
+      install:
         - sudo apt-get update
         - . ./lib.sh
-        - install_minetest_debian_builddeps
+      script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - CONFIG_WIN_ARCH=x86_64
@@ -75,10 +78,10 @@ jobs:
     - name: "Windows i686 Client"
       os: linux
       dist: xenial
-      script:
+      install:
         - sudo apt-get update
         - . ./lib.sh
-        - install_minetest_debian_builddeps
+      script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - CONFIG_WIN_ARCH=i686
