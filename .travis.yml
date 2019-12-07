@@ -34,8 +34,8 @@ jobs:
       os: linux
       dist: xenial
       script:
-        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
         - . ./lib.sh
+        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT "travis ci bug") && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
         - install_minetest_debian_builddeps
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
@@ -43,6 +43,20 @@ jobs:
         - build_minetest_client_gnulinux_amd64
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
         - cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
+        - popd
+    - name: "GNU/Linux AMD64 Server"
+      os: linux
+      dist: xenial
+      script:
+        - . ./lib.sh
+        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT "travis ci bug") && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
+        - install_minetest_debian_builddeps
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - build_minetest_server_gnulinux_amd64
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
+        - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         - popd
     - name: "Windows AMD64 Client"
       os: linux
@@ -72,20 +86,6 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/i686
         - cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/i686
         - popd
-    - name: "GNU/Linux AMD64 Server"
-      os: linux
-      dist: xenial
-      script:
-        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
-        - . ./lib.sh
-        - install_minetest_debian_builddeps
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - build_minetest_server_gnulinux_amd64
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
-        - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
-        - popd
     - name: "Android Client"
       os: linux
       dist: xenial
@@ -107,17 +107,15 @@ jobs:
         - . ./lib.sh
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
-        - git clone -b stable-5 --depth=1 https://github.com/minetest/minetest.git ./minetest # master was broken
-        - git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game
+        - get_minetest
         - rm -fr ./minetest/games/minetest_game/.git
         - echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties
         - echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties
         - pushd ./minetest/build/android
         - make release -j2 2>&1 | cat
-        - #mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
-        - #cp ./build/outputs/apk/release/Minetest-release.apk /tmp/WORKSPACE/DEPLOY/client/android
         - popd
-        - find -name Minetest-release.apk 2>/dev/null
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
+        - cp ./minetest/build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android
         - popd
 
 after_success:
