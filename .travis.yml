@@ -105,6 +105,7 @@ jobs:
         - export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
         - export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
         - echo y | sdkmanager "build-tools;29.0.2" >/dev/null
+        - export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
         - echo y | sdkmanager "platforms;android-29" >/dev/null
       script:
         - . ./lib.sh
