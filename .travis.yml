@@ -117,9 +117,8 @@ jobs:
         - #mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
         - #cp ./build/outputs/apk/release/Minetest-release.apk /tmp/WORKSPACE/DEPLOY/client/android
         - popd
-        - popd
-        - cd /
         - find -name Minetest-release.apk 2>/dev/null
+        - popd
 
 after_success:
   - |
