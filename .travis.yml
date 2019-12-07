@@ -118,7 +118,10 @@ jobs:
         - make release -j4 2>&1 | cat
         - popd
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
-        - cp ./minetest/build/android/build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
+        - zipalign -p 4 ./build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
+        - yes | keytool -genkey -v -keystore key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass
+        - apksigner sign --ks key.keystore --ks-key-alias key --ks-pass pass:storepass /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
+        - popd
         - popd
 
 after_success:
