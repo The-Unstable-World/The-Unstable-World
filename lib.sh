@@ -12,7 +12,6 @@ mods_mod(){
   echo \
     https://github.com/D00Med/vehicles.git \
     https://github.com/lnjX/carpet.git \
-    https://github.com/minetest-mods/craftguide.git \
     https://github.com/minetest-mods/crops.git \
     https://github.com/minetest-mods/flowerpot.git \
     https://github.com/minetest-mods/lapis.git \
@@ -22,7 +21,7 @@ mods_mod(){
     https://github.com/minetest-mods/xdecor.git \
     https://github.com/oOChainLynxOo/hardenedclay.git \
     https://github.com/paramat/snowdrift.git \
-    https://github.com/ShadowNinja/minetest_bedrock.git \
+    https://github.com/Uberi/Minetest-WorldEdit.git \
     https://gitlab.com/rubenwardy/awards.git \
     https://gitlab.com/VanessaE/basic_materials.git \
     https://gitlab.com/VanessaE/biome_lib.git \
