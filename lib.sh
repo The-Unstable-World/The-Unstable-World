@@ -11,12 +11,13 @@ get_minetest(){
 mods_mod(){
   echo \
     https://github.com/D00Med/vehicles.git \
+    https://github.com/Uberi/Minetest-WorldEdit.git \
+    https://github.com/minetest-mods/areas.git \
     https://github.com/minetest-mods/moreblocks.git \
     https://github.com/minetest-mods/nether.git \
     https://github.com/minetest-mods/quartz.git \
     https://github.com/minetest-mods/xdecor.git \
     https://github.com/paramat/snowdrift.git \
-    https://github.com/Uberi/Minetest-WorldEdit.git \
     https://gitlab.com/rubenwardy/awards.git \
     https://gitlab.com/VanessaE/basic_materials.git \
     https://gitlab.com/VanessaE/biome_lib.git \
