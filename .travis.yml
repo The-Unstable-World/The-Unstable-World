@@ -112,10 +112,10 @@ jobs:
         - echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties
         - echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties
         - pushd ./minetest/build/android
-        - make release -j2 2>&1 | cat
+        - make release -j4 2>&1 | cat
         - popd
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
-        - cp ./minetest/build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android
+        - cp ./minetest/build/android/build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
         - popd
 
 after_success:
