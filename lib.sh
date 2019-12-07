@@ -11,33 +11,41 @@ get_minetest(){
 mods_mod(){
   echo \
     https://github.com/D00Med/vehicles.git \
-    https://gitlab.com/rubenwardy/awards.git \
+    https://github.com/lnjX/carpet.git \
     https://github.com/minetest-mods/craftguide.git \
-    https://notabug.org/TenPlus1/farming.git \
-    https://notabug.org/TenPlus1/mobs_redo.git \
-    https://notabug.org/TenPlus1/mobs_animal.git \
-    https://notabug.org/TenPlus1/mobs_monster.git \
-    https://notabug.org/TenPlus1/mobs_npc.git \
-    https://notabug.org/TenPlus1/mob_horse.git \
+    https://github.com/minetest-mods/crops.git \
+    https://github.com/minetest-mods/flowerpot.git \
+    https://github.com/minetest-mods/lapis.git \
     https://github.com/minetest-mods/moreblocks.git \
+    https://github.com/minetest-mods/nether.git \
+    https://github.com/minetest-mods/quartz.git \
+    https://github.com/minetest-mods/xdecor.git \
+    https://github.com/oOChainLynxOo/hardenedclay.git \
     https://github.com/paramat/snowdrift.git \
+    https://github.com/ShadowNinja/minetest_bedrock.git \
+    https://gitlab.com/rubenwardy/awards.git \
+    https://gitlab.com/VanessaE/basic_materials.git \
     https://gitlab.com/VanessaE/biome_lib.git \
     https://gitlab.com/VanessaE/moretrees.git \
     https://gitlab.com/VanessaE/pipeworks.git \
-    https://gitlab.com/VanessaE/unifieddyes.git \
-    https://gitlab.com/VanessaE/basic_materials.git \
     https://gitlab.com/VanessaE/signs_lib.git \
+    https://gitlab.com/VanessaE/unifieddyes.git \
+    https://notabug.org/TenPlus1/farming.git \
+    https://notabug.org/TenPlus1/mob_horse.git \
+    https://notabug.org/TenPlus1/mobs_animal.git \
+    https://notabug.org/TenPlus1/mobs_monster.git \
+    https://notabug.org/TenPlus1/mobs_npc.git \
+    https://notabug.org/TenPlus1/mobs_redo.git \
     https://repo.or.cz/minetest_hudbars.git \
-    https://github.com/minetest-mods/quartz.git \
 
 }
 
 mods_modpack(){
   echo \
-    https://gitlab.com/VanessaE/homedecor_modpack.git \
-    https://github.com/stujones11/minetest-3d_armor.git \
     $(COMMENT http://git.bananach.space/advtrains.git "has some bug") \
     https://github.com/minetest-mods/mesecons.git \
+    https://github.com/stujones11/minetest-3d_armor.git \
+    https://gitlab.com/VanessaE/plantlife_modpack.git \
 
 }
 
