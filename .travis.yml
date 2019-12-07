@@ -12,9 +12,9 @@ jobs:
         - touch modpack.txt
         - mv WORLD-MT-CONFIG ..
         - zip -r ../modpack.zip .
+        - tar -czvf ../modpack.tgz .
         - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
-        - cp ../modpack.zip /tmp/WORKSPACE/DEPLOY/modpack
-        - cp ../WORLD-MT-CONFIG /tmp/WORKSPACE/DEPLOY/modpack
+        - cp ../modpack.zip ../modpack.tgz ../WORLD-MT-CONFIG /tmp/WORKSPACE/DEPLOY/modpack
         - popd
     - name: "MacOSX Client"
       os: osx
