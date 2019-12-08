@@ -69,7 +69,7 @@ get_mods__and__gen_WORLD-MT-CONFIG(){
   > WORLD-MT-CONFIG
   for x in *;do
     if [ -f "$x/mod.conf" ];then
-      local name=$(grep '^name[ \t]*=' "$x/mod.conf" | head -1 | sed 's/^.*=[ \t]*\([a-zA-Z_]*\).*$/\1/')
+      local name=$(grep '^name[ \t]*=' "$x/mod.conf" | head -1 | sed 's/^.*=[ \t]*\([^ \t]*\)[ \t]*$/\1/')
       echo "load_mod_${name} = true" >> WORLD-MT-CONFIG
       if [ "$x" != "$name" ];then
         mv "$x" "$name"
