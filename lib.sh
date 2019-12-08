@@ -175,3 +175,15 @@ build_minetest_server_gnulinux_amd64(){
   ./appimagetool-x86_64.AppImage minetestserver.AppDir minetestserver.AppImage
   cd ..
 }
+
+job_modpack(){
+  mkdir mods
+  cd mods
+  get_mods__and__gen_WORLD-MT-CONFIG
+  touch modpack.txt
+  mv WORLD-MT-CONFIG ..
+  zip -r ../modpack.zip .
+  tar -czvf ../modpack.tgz .
+  cd ..
+  rm -fr mods
+}
