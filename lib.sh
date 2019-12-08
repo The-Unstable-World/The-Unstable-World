@@ -11,6 +11,7 @@ get_minetest(){
 mods_mod(){
   echo \
     https://github.com/D00Med/vehicles.git \
+    https://github.com/Gerold55/minetest-laptop.git \
     https://github.com/Uberi/Minetest-WorldEdit.git \
     https://github.com/minetest-mods/areas.git \
     https://github.com/minetest-mods/moreblocks.git \
