@@ -6,4 +6,4 @@ Address: s29.natfrp.org Port: 31111
 
 list of mods: https://github.com/The-Unstable-World/binary/blob/master/modpack/WORLD-MT-CONFIG
 
-* (Temporarily) only modpack is compiled every few minutes, others are compiled daily. *
+***(Temporarily) only modpack is compiled every few minutes, others are compiled daily.***
