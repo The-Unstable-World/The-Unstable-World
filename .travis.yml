@@ -6,7 +6,8 @@ jobs:
       dist: xenial
       script:
         - . ./lib.sh
-        - mkdir -p /tmp/WORKSPACE/mods
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
         - job_modpack
         - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
         - cp -v * /tmp/WORKSPACE/DEPLOY/modpack
