@@ -17,6 +17,8 @@ mods_mod(){
     https://github.com/minetest-mods/nether.git \
     https://github.com/minetest-mods/quartz.git \
     https://github.com/minetest-mods/skinsdb.git \
+    https://github.com/minetest-mods/stamina.git \
+    https://github.com/minetest-mods/xban2.git \
     https://github.com/minetest-mods/xdecor.git \
     https://github.com/paramat/snowdrift.git \
     https://gitlab.com/rubenwardy/awards.git \
@@ -32,7 +34,6 @@ mods_mod(){
     https://notabug.org/TenPlus1/mobs_monster.git \
     https://notabug.org/TenPlus1/mobs_npc.git \
     https://notabug.org/TenPlus1/mobs_redo.git \
-    https://repo.or.cz/minetest_hudbars.git \
 
 }
 
