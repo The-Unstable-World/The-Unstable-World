@@ -16,6 +16,7 @@ mods_mod(){
     https://github.com/minetest-mods/moreblocks.git \
     https://github.com/minetest-mods/nether.git \
     https://github.com/minetest-mods/quartz.git \
+    https://github.com/minetest-mods/skinsdb.git \
     https://github.com/minetest-mods/xdecor.git \
     https://github.com/paramat/snowdrift.git \
     https://gitlab.com/rubenwardy/awards.git \
