@@ -7,14 +7,9 @@ jobs:
       script:
         - . ./lib.sh
         - mkdir -p /tmp/WORKSPACE/mods
-        - pushd /tmp/WORKSPACE/mods
-        - get_mods__and__gen_WORLD-MT-CONFIG
-        - touch modpack.txt
-        - mv WORLD-MT-CONFIG ..
-        - zip -r ../modpack.zip .
-        - tar -czvf ../modpack.tgz .
+        - job_modpack
         - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
-        - cp ../modpack.zip ../modpack.tgz ../WORLD-MT-CONFIG /tmp/WORKSPACE/DEPLOY/modpack
+        - cp -v * /tmp/WORKSPACE/DEPLOY/modpack
         - popd
     - name: "MacOSX Client"
       os: osx
