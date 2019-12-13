@@ -122,17 +122,19 @@ jobs:
 
 after_success:
   - |
-    if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
+    if [ -n "${PUBLISH_REPO}" ] && [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
       git config --global user.email tsao-chi@the-lingo.org
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
       echo "${PRIVATE_KEY_BASE64}" | base64 -d > ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
       cd /tmp/WORKSPACE/DEPLOY
-      git clone --bare --depth 1 git@github.com:The-Unstable-World/binary.git .git
+      git init
+      git remote add origin "${PUBLISH_REPO}"
+      git fetch --depth=1
+      git reset --soft origin/master
       git add $(find * -type f)
       git commit -m 'deploy' || true
-      until git push ;do
+      until git push --set-upstream origin master ;do
         git fetch --depth=1
-        git reset --soft origin/master
       done
     fi
