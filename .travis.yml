@@ -89,7 +89,7 @@ jobs:
       os: linux
       dist: xenial
       cache:
-        directories:
+        - directories:
           - $HOME/apk-sign-key
       install:
         - wget --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
