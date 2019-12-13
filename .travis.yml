@@ -133,7 +133,8 @@ after_success:
       git fetch --depth=1
       git reset --soft origin/master
       find * -type f
-      #git add $(find * -type f)
+      git rm -r --cached .
+      git add $(find * -type f)
       git commit -m 'deploy' || true
       until git push --set-upstream origin master ;do
         git fetch --depth=1
