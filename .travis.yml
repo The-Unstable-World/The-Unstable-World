@@ -122,12 +122,13 @@ jobs:
 
 after_success:
   - |
-    if [ -n "${PUBLISH_REPO}" ] && [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
+    if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
       git config --global user.email tsao-chi@the-lingo.org
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
       echo "${PRIVATE_KEY_BASE64}" | base64 --decode > ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
-      git clone --depth 1 "${PUBLISH_REPO}" /tmp/WORKSPACE/deploy_repo
+      ssh-keygen -R github.com
+      git clone --depth 1 git@github.com:The-Unstable-World/binary.git /tmp/WORKSPACE/deploy_repo
       cd /tmp/WORKSPACE/deploy_repo
       cp -rv /tmp/WORKSPACE/DEPLOY/* ./
       git add .
