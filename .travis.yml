@@ -127,16 +127,10 @@ after_success:
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
       echo "${PRIVATE_KEY_BASE64}" | base64 -d > ~/.ssh/id_rsa
       chmod 600 ~/.ssh/id_rsa
-      cd /tmp/WORKSPACE/DEPLOY
-      git init
-      git remote add origin "${PUBLISH_REPO}"
-      git fetch --depth=1
-      git reset --soft origin/master
-      find * -type f
-      git rm -r --cached .
-      git add $(find * -type f)
+      git clone --depth 1 "${PUBLISH_REPO}" /tmp/WORKSPACE/deploy_repo
+      cd /tmp/WORKSPACE/deploy_repo
+      cp -rv /tmp/WORKSPACE/DEPLOY/* ./
+      git add .
       git commit -m 'deploy' || true
-      until git push --set-upstream origin master ;do
-        git fetch --depth=1
-      done
+      git push --force
     fi
