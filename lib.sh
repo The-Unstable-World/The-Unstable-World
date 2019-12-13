@@ -176,14 +176,13 @@ build_minetest_server_gnulinux_amd64(){
   cd ..
 }
 
-job_modpack(){
+job_mods(){
   mkdir mods
   cd mods
   get_mods__and__gen_WORLD-MT-CONFIG
-  touch modpack.txt
   mv WORLD-MT-CONFIG ..
-  zip -r ../modpack.zip .
-  tar -czvf ../modpack.tgz .
+  zip -r ../mods.zip .
+  tar -czvf ../mods.tgz .
   cd ..
   rm -fr mods
 }
