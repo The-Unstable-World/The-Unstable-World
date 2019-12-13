@@ -88,6 +88,10 @@ jobs:
     - name: "Android Client"
       os: linux
       dist: xenial
+      cache:
+        directories:
+        # This signing key is just to make Android happy
+        - $HOME/apk-sign-key
       install:
         - wget --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
         - unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux
@@ -115,8 +119,9 @@ jobs:
         - make release -j4 2>&1 | cat
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
         - zipalign -p 4 ./build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
-        - yes | keytool -genkey -v -keystore key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass
-        - apksigner sign --ks key.keystore --ks-key-alias key --ks-pass pass:storepass /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
+        - mkdir -p ~/apk-sign-key
+        - [ -f ~/apk-sign-key/key.keystore ] || (yes | keytool -genkey -v -keystore ~/apk-sign-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass)
+        - apksigner sign --ks ~/apk-sign-key/key.keystore --ks-key-alias key --ks-pass pass:storepass /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
         - popd
         - popd
 
