@@ -167,6 +167,7 @@ build_minetest_server_gnulinux_amd64(){
   rm ./minetestserver.AppDir/usr/share/applications/* &&
   echo '[Desktop Entry]
 Name=MinetestServer
+Icon=minetest
 Exec=minetestserver' > ./minetestserver.AppDir/usr/share/applications/minetestserver.desktop &&
   wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage &&
   chmod +x linuxdeploy-x86_64.AppImage &&
