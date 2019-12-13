@@ -1,16 +1,16 @@
 language: cpp
 jobs:
   include:
-    - name: "modpack"
+    - name: "Mods"
       os: linux
       dist: xenial
       script:
         - . ./lib.sh
         - mkdir -p /tmp/WORKSPACE/work
         - pushd /tmp/WORKSPACE/work
-        - job_modpack
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/modpack
-        - cp -v * /tmp/WORKSPACE/DEPLOY/modpack
+        - job_mods
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/mods
+        - cp -v * /tmp/WORKSPACE/DEPLOY/mods
         - popd
     - name: "MacOSX Client"
       os: osx
