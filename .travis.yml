@@ -120,7 +120,7 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/android
         - zipalign -p 4 ./build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
         - mkdir -p ~/apk-signing-key
-        - if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass;fi
+        - if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass;fi
         - apksigner sign --ks ~/apk-signing-key/key.keystore --ks-key-alias key --ks-pass pass:storepass /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk
         - popd
         - popd
