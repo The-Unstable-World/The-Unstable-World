@@ -17,9 +17,9 @@ jobs:
       os: osx
       osx_image: xcode8
       install:
-        - brew update
+        - travis_retry brew update
         - . ./lib.sh
-        - env -i bash -l -c "brew install $(minetest_osx_builddeps)"
+        - travis_retry install_minetest_osx_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
@@ -33,8 +33,8 @@ jobs:
       dist: xenial
       install:
         - . ./lib.sh
-        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT "travis ci bug") && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
-        - install_minetest_debian_builddeps
+        - travis_retry sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
+        - travis_retry install_minetest_debian_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
@@ -48,8 +48,8 @@ jobs:
       dist: xenial
       install:
         - . ./lib.sh
-        - sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT "travis ci bug") && sudo apt-get dist-upgrade -y # because some libraries will be copied to AppImage
-        - install_minetest_debian_builddeps
+        - travis_retry sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
+        - travis_retry install_minetest_debian_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
@@ -62,7 +62,7 @@ jobs:
       os: linux
       dist: xenial
       install:
-        - sudo apt-get update
+        - travis_retry sudo apt-get update
         - . ./lib.sh
       script:
         - mkdir -p /tmp/WORKSPACE
@@ -76,7 +76,7 @@ jobs:
       os: linux
       dist: xenial
       install:
-        - sudo apt-get update
+        - travis_retry sudo apt-get update
         - . ./lib.sh
       script:
         - mkdir -p /tmp/WORKSPACE
