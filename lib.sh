@@ -122,7 +122,7 @@ install_minetest_mingw_builddeps__and__build__ubuntu1604(){
   fi
   (get_minetest &&
   RETRY sudo apt-get install -y p7zip-full wget unzip git cmake gettext &&
-  RETRY wget -c "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_7.1.1_ubuntu14.04.7z" -O mingw.7z &&
+  RETRY wget --continue "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_7.1.1_ubuntu14.04.7z" -O mingw.7z &&
   sed -e "s|%PREFIX%|${WIN_ARCH}-w64-mingw32|" -e "s|%ROOTPATH%|/usr/${WIN_ARCH}-w64-mingw32|" < ./minetest/util/travis/toolchain_mingw.cmake.in > ./minetest/util/buildbot/toolchain_mingw.cmake &&
   sudo 7z x -y -o/usr mingw.7z &&
   EXISTING_MINETEST_DIR="$PWD/minetest/" NO_MINETEST_GAME=1 "./minetest/util/buildbot/buildwin${WIN_BITS}.sh" build &&
