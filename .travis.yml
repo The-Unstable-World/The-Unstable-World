@@ -31,33 +31,35 @@ jobs:
     - name: "GNU/Linux AMD64 Client"
       os: linux
       dist: xenial
-      install:
-        - . ./lib.sh
-        - RETRY sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
-        - install_minetest_debian_builddeps
-      script:
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - build_minetest_client_gnulinux_amd64
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
-        - cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
-        - popd
+      script: |
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
+          . ./lib.sh
+          RETRY apt-get update &&
+          RETRY apt-get dist-upgrade -y &&
+          install_minetest_debian_builddeps_nosudo &&
+          mkdir -p /tmp/WORKSPACE &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_client_gnulinux_amd64 &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
+        '
     - name: "GNU/Linux AMD64 Server"
       os: linux
       dist: xenial
-      install:
-        - . ./lib.sh
-        - RETRY sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
-        - install_minetest_debian_builddeps
-      script:
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - build_minetest_server_gnulinux_amd64
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
-        - cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
-        - popd
+      script: |
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
+          . ./lib.sh
+          RETRY apt-get update &&
+          RETRY apt-get dist-upgrade -y &&
+          install_minetest_debian_builddeps_nosudo &&
+          mkdir -p /tmp/WORKSPACE &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_server_gnulinux_amd64 &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+        '
     - name: "Windows AMD64 Client"
       os: linux
       dist: xenial
