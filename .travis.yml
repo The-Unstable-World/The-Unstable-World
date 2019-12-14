@@ -127,7 +127,7 @@ jobs:
 
 after_success:
   - |
-    if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then; while true; do
+    if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then while true; do
       cd /tmp/WORKSPACE
       git config --global user.email tsao-chi@the-lingo.org
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
