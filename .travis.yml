@@ -28,9 +28,9 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
         - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
-    - name: "MacOSX Client (MacOSX10.14+XCode10.3)"
+    - name: "MacOSX Client (MacOSX10.13+XCode9.4.1)"
       os: osx
-      osx_image: xcode10.3
+      osx_image: xcode9.4
       install:
         - . ./lib.sh
         - RETRY brew update
@@ -41,7 +41,7 @@ jobs:
         - get_minetest
         - build_minetest_client_osx
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
-        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest_mojave.zip
+        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest_highsierra.zip
         - popd
     - name: "GNU/Linux AMD64 Client"
       os: linux
