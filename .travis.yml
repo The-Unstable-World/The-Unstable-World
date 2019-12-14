@@ -3,7 +3,7 @@ jobs:
   include:
     - name: "Mods"
       os: linux
-      dist: xenial
+      dist: bionic
       install:
         - . ./lib.sh
       script:
@@ -60,7 +60,7 @@ jobs:
           get_minetest &&
           build_minetest_server_gnulinux_amd64 &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
-          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         '
     - name: "GNU/Linux AMD64 Client (Archlinux)"
       os: linux
@@ -90,7 +90,7 @@ jobs:
           get_minetest &&
           build_minetest_server_gnulinux_amd64 &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
-          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage
         '
     - name: "Windows AMD64 Client"
       os: linux
