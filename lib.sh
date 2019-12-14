@@ -84,16 +84,24 @@ get_mods__and__gen_WORLD-MT-CONFIG(){
   done
 }
 
+minetest_osx_builddeps(){
+  echo freetype gettext irrlicht libogg libvorbis luajit
+}
+
 install_minetest_osx_builddeps(){
-  brew install freetype gettext irrlicht libogg libvorbis luajit
+  brew install $(minetest_osx_builddeps)
+}
+
+minetest_debian_builddeps(){
+  echo build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
 
 install_minetest_debian_builddeps(){
-  sudo apt-get install -y build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
+  sudo apt-get install -y $(minetest_debian_builddeps)
 }
 
 install_minetest_debian_builddeps_nosudo(){
-  apt-get install -y build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
+  apt-get install -y $(minetest_debian_builddeps)
 }
 
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
