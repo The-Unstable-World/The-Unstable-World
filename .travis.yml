@@ -28,9 +28,9 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
         - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
-    - name: "MacOSX Client (latest OSX)"
+    - name: "MacOSX Client (MacOSX10.14+XCode10.3)"
       os: osx
-      osx_image: xcode11.2
+      osx_image: xcode10.3
       install:
         - . ./lib.sh
         - RETRY brew update
