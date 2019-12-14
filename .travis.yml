@@ -4,8 +4,9 @@ jobs:
     - name: "Mods"
       os: linux
       dist: xenial
-      script:
+      install:
         - . ./lib.sh
+      script:
         - mkdir -p /tmp/WORKSPACE/work
         - pushd /tmp/WORKSPACE/work
         - job_mods
@@ -18,7 +19,7 @@ jobs:
       install:
         - brew update
         - . ./lib.sh
-        - install_minetest_osx_builddeps
+        - env -i bash -l -c "brew install $(minetest_osx_builddeps)"
       script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
