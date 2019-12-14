@@ -17,8 +17,8 @@ jobs:
       os: osx
       osx_image: xcode8
       install:
-        - travis_retry brew update
         - . ./lib.sh
+        - RETRY brew update
         - install_minetest_osx_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
@@ -33,7 +33,7 @@ jobs:
       dist: xenial
       install:
         - . ./lib.sh
-        - travis_retry sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
+        - RETRY sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
         - install_minetest_debian_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
@@ -48,7 +48,7 @@ jobs:
       dist: xenial
       install:
         - . ./lib.sh
-        - travis_retry sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
+        - RETRY sh -c "sudo apt-get update && sudo apt-get remove -y mysql-server-5.7 $(COMMENT travis ci bug) && sudo apt-get dist-upgrade -y" # because some libraries will be copied to AppImage
         - install_minetest_debian_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
@@ -62,7 +62,7 @@ jobs:
       os: linux
       dist: xenial
       install:
-        - travis_retry sudo apt-get update
+        - RETRY sudo apt-get update
         - . ./lib.sh
       script:
         - mkdir -p /tmp/WORKSPACE
@@ -76,7 +76,7 @@ jobs:
       os: linux
       dist: xenial
       install:
-        - travis_retry sudo apt-get update
+        - RETRY sudo apt-get update
         - . ./lib.sh
       script:
         - mkdir -p /tmp/WORKSPACE
@@ -94,13 +94,13 @@ jobs:
           # This signing key is only used to make Android happy, not for signing.
           - $HOME/apk-signing-key
       install:
-        - wget --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
+        - RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
         - unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux
         - rm ~/sdk-tools-linux.zip
         - export ANDROID_HOME="$HOME/android-sdk-linux"
         - export PATH="$PATH:$ANDROID_HOME/tools/bin"
         - ndk_version=r16b
-        - wget --quiet -O "$HOME/android-ndk-${ndk_version}.zip" "https://dl.google.com/android/repository/android-ndk-${ndk_version}-linux-x86_64.zip"
+        - RETRY wget --continue --quiet -O "$HOME/android-ndk-${ndk_version}.zip" "https://dl.google.com/android/repository/android-ndk-${ndk_version}-linux-x86_64.zip"
         - unzip -q "$HOME/android-ndk-${ndk_version}.zip" -d ~
         - rm "$HOME/android-ndk-${ndk_version}.zip"
         - export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
