@@ -108,6 +108,14 @@ install_minetest_debian_builddeps_nosudo(){
   RETRY apt-get install -y $(minetest_debian_builddeps)
 }
 
+minetest_archlinux_builddeps(){
+  echo git base-devel libcurl-gnutls cmake libxxf86vm irrlicht libpng sqlite libogg libvorbis openal freetype2 jsoncpp gmp luajit leveldb ncurses
+}
+
+install_minetest_archlinux_builddeps_nosudo(){
+  RETRY pacman -Syu --noconfirm $(minetest_archlinux_builddeps)
+}
+
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
 CONFIG_WIN_ARCH=x86_64
 install_minetest_mingw_builddeps__and__build__ubuntu1604(){
