@@ -94,6 +94,7 @@ jobs:
           # This signing key is only used to make Android happy, not for signing.
           - $HOME/apk-signing-key
       install:
+        - . ./lib.sh
         - RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip
         - unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux
         - rm ~/sdk-tools-linux.zip
@@ -109,7 +110,6 @@ jobs:
         - export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
         - echo y | sdkmanager "platforms;android-29" >/dev/null
       script:
-        - . ./lib.sh
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
         - get_minetest
