@@ -139,5 +139,6 @@ after_success:
       cd /tmp/WORKSPACE/deploy_repo
       cp -rv /tmp/WORKSPACE/DEPLOY/* ./
       git add .
-      git commit -m 'deploy' && break
+      git commit -m 'deploy'
+      git push && break
     done; fi
