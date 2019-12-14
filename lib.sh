@@ -119,7 +119,8 @@ install_minetest_mingw_builddeps__and__build__ubuntu1604(){
   cp /usr/"${WIN_ARCH}"-w64-mingw32/bin/libgcc*.dll \
     /usr/"${WIN_ARCH}"-w64-mingw32/bin/libstdc++*.dll \
     /usr/"${WIN_ARCH}"-w64-mingw32/bin/libwinpthread*.dll minetest-win/bin &&
-  7z a ./minetest/minetest.zip minetest-win/*)
+  cd minetest-win &&
+  7z a ../minetest/minetest.zip .)
 }
 
 build_minetest_client_osx(){
