@@ -47,13 +47,13 @@ jobs:
       os: linux
       dist: xenial
       script: |
+        mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           RETRY apt-get update &&
           RETRY apt-get dist-upgrade -y &&
           install_minetest_debian_builddeps_nosudo &&
-          mkdir -p /tmp/WORKSPACE &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_client_gnulinux_amd64 &&
@@ -64,13 +64,13 @@ jobs:
       os: linux
       dist: xenial
       script: |
+        mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           RETRY apt-get update &&
           RETRY apt-get dist-upgrade -y &&
           install_minetest_debian_builddeps_nosudo &&
-          mkdir -p /tmp/WORKSPACE &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_server_gnulinux_amd64 &&
@@ -81,11 +81,11 @@ jobs:
       os: linux
       dist: xenial
       script: |
+        mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           install_minetest_archlinux_builddeps_nosudo &&
-          mkdir -p /tmp/WORKSPACE &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_client_gnulinux_amd64 &&
@@ -96,11 +96,11 @@ jobs:
       os: linux
       dist: xenial
       script: |
+        mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           install_minetest_archlinux_builddeps_nosudo &&
-          mkdir -p /tmp/WORKSPACE &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_server_gnulinux_amd64 &&
