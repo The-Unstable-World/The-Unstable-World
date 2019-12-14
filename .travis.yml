@@ -62,8 +62,8 @@ jobs:
       os: linux
       dist: xenial
       install:
-        - RETRY sudo apt-get update
         - . ./lib.sh
+        - RETRY sudo apt-get update
       script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
@@ -76,8 +76,8 @@ jobs:
       os: linux
       dist: xenial
       install:
-        - RETRY sudo apt-get update
         - . ./lib.sh
+        - RETRY sudo apt-get update
       script:
         - mkdir -p /tmp/WORKSPACE
         - pushd /tmp/WORKSPACE
