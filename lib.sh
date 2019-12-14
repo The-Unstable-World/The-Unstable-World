@@ -97,7 +97,7 @@ install_minetest_osx_builddeps(){
 }
 
 minetest_debian_builddeps(){
-  echo git build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
+  echo wget git build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
 
 install_minetest_debian_builddeps(){
@@ -109,7 +109,7 @@ install_minetest_debian_builddeps_nosudo(){
 }
 
 minetest_archlinux_builddeps(){
-  echo git base-devel libcurl-gnutls cmake libxxf86vm irrlicht libpng sqlite libogg libvorbis openal freetype2 jsoncpp gmp luajit leveldb ncurses
+  echo wget git base-devel libcurl-gnutls cmake libxxf86vm irrlicht libpng sqlite libogg libvorbis openal freetype2 jsoncpp gmp luajit leveldb ncurses
 }
 
 install_minetest_archlinux_builddeps_nosudo(){
