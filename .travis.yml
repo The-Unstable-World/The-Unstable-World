@@ -33,6 +33,7 @@ jobs:
       dist: xenial
       script: |
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           RETRY apt-get update &&
           RETRY apt-get dist-upgrade -y &&
@@ -49,6 +50,7 @@ jobs:
       dist: xenial
       script: |
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           RETRY apt-get update &&
           RETRY apt-get dist-upgrade -y &&
@@ -59,6 +61,36 @@ jobs:
           build_minetest_server_gnulinux_amd64 &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+        '
+    - name: "GNU/Linux AMD64 Client (Archlinux)"
+      os: linux
+      dist: xenial
+      script: |
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          install_minetest_archlinux_builddeps_nosudo &&
+          mkdir -p /tmp/WORKSPACE &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_client_gnulinux_amd64 &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_archlinux.AppImage
+        '
+    - name: "GNU/Linux AMD64 Server (Archlinux)"
+      os: linux
+      dist: xenial
+      script: |
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          install_minetest_archlinux_builddeps_nosudo &&
+          mkdir -p /tmp/WORKSPACE &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_server_gnulinux_amd64 &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage &&
         '
     - name: "Windows AMD64 Client"
       os: linux
