@@ -28,6 +28,21 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
         - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
+    - name: "MacOSX Client (latest OSX)"
+      os: osx
+      osx_image: xcode11.2
+      install:
+        - . ./lib.sh
+        - RETRY brew update
+        - install_minetest_osx_builddeps
+      script:
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - build_minetest_client_osx
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
+        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest_mojave.zip
+        - popd
     - name: "GNU/Linux AMD64 Client"
       os: linux
       dist: xenial
