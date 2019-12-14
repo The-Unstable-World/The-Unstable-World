@@ -1,10 +1,14 @@
+RETRY(){
+  "$@" || "$@" || "$@" || "$@" || "$@" || "$@" || "$@" || "$@"
+}
+
 COMMENT(){
   :
 }
 
 get_minetest(){
-  (git clone --depth=1 https://github.com/minetest/minetest.git ./minetest &&
-  git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game &&
+  (RETRY git clone --depth=1 https://github.com/minetest/minetest.git ./minetest &&
+  RETRY git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game &&
   rm -fr ./minetest/games/minetest_game/.git)
 }
 
@@ -51,13 +55,13 @@ get_mods__and__gen_WORLD-MT-CONFIG(){
   for x in $(mods_mod);do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
-    git clone "$x" || return 1
+    RETRY git clone "$x" || return 1
     rm -fr "$x_name"/.git
   done
 
   for x in $(mods_modpack);do
     rm -fr MODPACK-TMP
-    git clone "$x" MODPACK-TMP || return 1
+    RETRY git clone "$x" MODPACK-TMP || return 1
     for subdir in MODPACK-TMP/*;do
       if [ -f "$subdir/mod.conf" ] || [ -f "$subdir/init.lua" ];then
         mv "$subdir" ./
@@ -89,7 +93,7 @@ minetest_osx_builddeps(){
 }
 
 install_minetest_osx_builddeps(){
-  brew install $(minetest_osx_builddeps)
+  RETRY brew install $(minetest_osx_builddeps)
 }
 
 minetest_debian_builddeps(){
@@ -97,11 +101,11 @@ minetest_debian_builddeps(){
 }
 
 install_minetest_debian_builddeps(){
-  sudo apt-get install -y $(minetest_debian_builddeps)
+  RETRY sudo apt-get install -y $(minetest_debian_builddeps)
 }
 
 install_minetest_debian_builddeps_nosudo(){
-  apt-get install -y $(minetest_debian_builddeps)
+  RETRY apt-get install -y $(minetest_debian_builddeps)
 }
 
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
@@ -117,8 +121,8 @@ install_minetest_mingw_builddeps__and__build__ubuntu1604(){
     WIN_BITS=32
   fi
   (get_minetest &&
-  sudo apt-get install -y p7zip-full wget unzip git cmake gettext &&
-  wget "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_7.1.1_ubuntu14.04.7z" -O mingw.7z &&
+  RETRY sudo apt-get install -y p7zip-full wget unzip git cmake gettext &&
+  RETRY wget -c "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_7.1.1_ubuntu14.04.7z" -O mingw.7z &&
   sed -e "s|%PREFIX%|${WIN_ARCH}-w64-mingw32|" -e "s|%ROOTPATH%|/usr/${WIN_ARCH}-w64-mingw32|" < ./minetest/util/travis/toolchain_mingw.cmake.in > ./minetest/util/buildbot/toolchain_mingw.cmake &&
   sudo 7z x -y -o/usr mingw.7z &&
   EXISTING_MINETEST_DIR="$PWD/minetest/" NO_MINETEST_GAME=1 "./minetest/util/buildbot/buildwin${WIN_BITS}.sh" build &&
@@ -147,8 +151,27 @@ build_minetest_client_osx(){
   make -j4 package)
 }
 
+CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+get_appimage_tools_noretry(){
+  local LINUXDEP_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
+  local APPIMATOOL_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
+  [ "$LINUXDEP_ARCH" = i686 ] && LINUXDEP_ARCH=i386
+  [ "$APPIMATOOL_ARCH" = i386 ] && APPIMATOOL_ARCH=i686
+  rm -fr linuxdeploy.AppImage appimagetool.AppImage
+
+  wget -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-"$LINUXDEP_ARCH".AppImage &&
+  wget -O appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-"$APPIMATOOL_ARCH".AppImage &&
+  chmod +x linuxdeploy.AppImage &&
+  chmod +x appimagetool.AppImage
+}
+
+get_appimage_tools(){
+  RETRY get_appimage_tools_noretry
+}
+
 build_minetest_client_gnulinux_amd64(){
-  (cd ./minetest &&
+  (CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+  cd ./minetest &&
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
@@ -156,16 +179,14 @@ build_minetest_client_gnulinux_amd64(){
     -DBUILD_SERVER=FALSE &&
   make -j4 &&
   make install DESTDIR=minetest.AppDir &&
-  wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage &&
-  chmod +x linuxdeploy-x86_64.AppImage &&
-  ./linuxdeploy-x86_64.AppImage --appdir minetest.AppDir &&
-  wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage &&
-  chmod +x appimagetool-x86_64.AppImage &&
-  ./appimagetool-x86_64.AppImage minetest.AppDir minetest.AppImage)
+  get_appimage_tools &&
+  ./linuxdeploy.AppImage --appdir minetest.AppDir &&
+  ./appimagetool.AppImage minetest.AppDir minetest.AppImage)
 }
 
 build_minetest_server_gnulinux_amd64(){
-  (cd ./minetest &&
+  (CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+  cd ./minetest &&
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
@@ -180,12 +201,9 @@ Icon=minetest
 Type=Application
 Categories=Game;Simulation;
 Exec=minetestserver' > ./minetestserver.AppDir/usr/share/applications/minetestserver.desktop &&
-  wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage &&
-  chmod +x linuxdeploy-x86_64.AppImage &&
-  ./linuxdeploy-x86_64.AppImage --appdir minetestserver.AppDir &&
-  wget https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage &&
-  chmod +x appimagetool-x86_64.AppImage &&
-  ./appimagetool-x86_64.AppImage minetestserver.AppDir minetestserver.AppImage)
+  get_appimage_tools &&
+  ./linuxdeploy.AppImage --appdir minetestserver.AppDir &&
+  ./appimagetool.AppImage minetestserver.AppDir minetestserver.AppImage)
 }
 
 job_mods(){
