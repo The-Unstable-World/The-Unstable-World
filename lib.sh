@@ -1,17 +1,14 @@
 RETRY(){
   "$@" || "$@" || "$@" || "$@" || "$@" || "$@" || "$@" || "$@"
 }
-
 COMMENT(){
   :
 }
-
 get_minetest(){
   (RETRY git clone --depth=1 https://github.com/minetest/minetest.git ./minetest &&
   RETRY git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game &&
   rm -fr ./minetest/games/minetest_game/.git)
 }
-
 mods_mod(){
   echo \
     https://github.com/D00Med/vehicles.git \
@@ -41,7 +38,6 @@ mods_mod(){
     https://notabug.org/TenPlus1/mobs_redo.git \
 
 }
-
 mods_modpack(){
   echo \
     $(COMMENT http://git.bananach.space/advtrains.git "has some bug") \
@@ -50,8 +46,8 @@ mods_modpack(){
     https://gitlab.com/VanessaE/plantlife_modpack.git \
 
 }
-
-get_mods__and__gen_WORLD-MT-CONFIG(){
+# wmt_cfg = WORLD-MT-CONFIG
+get_mods__and__gen_wmt_cfg(){
   for x in $(mods_mod);do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
@@ -87,35 +83,36 @@ get_mods__and__gen_WORLD-MT-CONFIG(){
     fi
   done
 }
-
 minetest_osx_builddeps(){
   echo freetype gettext irrlicht libogg libvorbis luajit
 }
-
 install_minetest_osx_builddeps(){
   RETRY brew install $(minetest_osx_builddeps)
 }
-
 minetest_debian_builddeps(){
   echo file wget git build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
-
 install_minetest_debian_builddeps(){
   RETRY sudo apt-get install -y $(minetest_debian_builddeps)
 }
-
 install_minetest_debian_builddeps_nosudo(){
   RETRY apt-get install -y $(minetest_debian_builddeps)
 }
-
 minetest_archlinux_builddeps(){
   echo wget git base-devel libcurl-gnutls cmake libxxf86vm irrlicht libpng sqlite libogg libvorbis openal freetype2 jsoncpp gmp luajit leveldb ncurses
 }
-
 install_minetest_archlinux_builddeps_nosudo(){
   RETRY pacman -Syu --noconfirm $(minetest_archlinux_builddeps)
 }
-
+install_minetest_centos7_builddeps_nosudo(){
+  RETRY yum install -y centos-release-scl-rh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &&
+  RETRY yum install -y git file wget make automake devtoolset-8-gcc devtoolset-8-gcc-c++ kernel-devel cmake3 libcurl-devel openal-soft-devel libvorbis-devel libXxf86vm-devel libogg-devel freetype-devel mesa-libGL-devel zlib-devel jsoncpp-devel irrlicht-devel bzip2-libs gmp-devel sqlite-devel luajit-devel leveldb-devel ncurses-devel doxygen spatialindex-devel bzip2-devel &&
+  ln -s /opt/rh/devtoolset-8/root/usr/bin/* /usr/local/bin &&
+  ln -s /usr/bin/cmake3 /usr/local/bin/cmake &&
+  ln -s /usr/bin/ctest3 /usr/local/bin/ctest &&
+  ln -s /usr/bin/cpack3 /usr/local/bin/cpack &&
+  ln -s /usr/bin/ccmake3 /usr/local/bin/ccmake
+}
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
 CONFIG_WIN_ARCH=x86_64
 install_minetest_mingw_builddeps__and__build__ubuntu1604(){
@@ -142,7 +139,6 @@ install_minetest_mingw_builddeps__and__build__ubuntu1604(){
   cd minetest-win &&
   7z a ../minetest/minetest.zip .)
 }
-
 build_minetest_client_osx(){
   (cd ./minetest &&
   cmake . \
@@ -158,7 +154,6 @@ build_minetest_client_osx(){
     -DCMAKE_EXE_LINKER_FLAGS="-L/usr/local/lib" &&
   make -j4 package)
 }
-
 CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
 get_appimage_tools_noretry(){
   local LINUXDEP_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
@@ -172,35 +167,35 @@ get_appimage_tools_noretry(){
   chmod +x linuxdeploy.AppImage &&
   chmod +x appimagetool.AppImage
 }
-
 get_appimage_tools(){
   RETRY get_appimage_tools_noretry
 }
-
-build_minetest_client_gnulinux_amd64(){
-  (CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
-  cd ./minetest &&
+build_minetest_client_gnulinux(){
+  (cd ./minetest &&
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_CLIENT=TRUE \
     -DBUILD_SERVER=FALSE &&
-  make -j4 &&
-  make install DESTDIR=minetest.AppDir &&
-  get_appimage_tools &&
-  ./linuxdeploy.AppImage --appdir minetest.AppDir &&
-  ./appimagetool.AppImage minetest.AppDir minetest.AppImage)
+  make -j4)
 }
-
-build_minetest_server_gnulinux_amd64(){
-  (CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
-  cd ./minetest &&
+bundle_minetest_client_gnulinux_appimage(){
+  (cd ./minetest &&
+  make install DESTDIR=minetest.AppDir &&
+  ../linuxdeploy.AppImage --appdir minetest.AppDir &&
+  ../appimagetool.AppImage minetest.AppDir minetest.AppImage)
+}
+build_minetest_server_gnulinux(){
+  (cd ./minetest &&
   cmake . \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
     -DBUILD_SERVER=TRUE \
     -DBUILD_CLIENT=FALSE &&
-  make -j4 &&
+  make -j4)
+}
+bundle_minetest_server_gnulinux_appimage(){
+  (cd ./minetest &&
   make install DESTDIR=minetestserver.AppDir &&
   rm ./minetestserver.AppDir/usr/share/applications/* &&
   echo '[Desktop Entry]
@@ -210,14 +205,13 @@ Type=Application
 Categories=Game;Simulation;
 Exec=minetestserver' > ./minetestserver.AppDir/usr/share/applications/minetestserver.desktop &&
   get_appimage_tools &&
-  ./linuxdeploy.AppImage --appdir minetestserver.AppDir &&
-  ./appimagetool.AppImage minetestserver.AppDir minetestserver.AppImage)
+  ../linuxdeploy.AppImage --appdir minetestserver.AppDir &&
+  ../appimagetool.AppImage minetestserver.AppDir minetestserver.AppImage)
 }
-
 job_mods(){
   (mkdir mods &&
   cd mods &&
-  get_mods__and__gen_WORLD-MT-CONFIG &&
+  get_mods__and__gen_wmt_cfg &&
   mv WORLD-MT-CONFIG .. &&
   zip -r ../mods.zip . &&
   tar -czvf ../mods.tgz . &&
