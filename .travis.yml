@@ -48,15 +48,17 @@ jobs:
       dist: xenial
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7.7.1908 bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
-          RETRY apt-get update &&
-          RETRY apt-get dist-upgrade -y &&
-          install_minetest_debian_builddeps_nosudo &&
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
-          build_minetest_client_gnulinux_amd64 &&
+          build_minetest_client_gnulinux &&
+          get_appimage_tools &&
+          bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
         '
@@ -65,15 +67,17 @@ jobs:
       dist: xenial
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" ubuntu:xenial bash -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7.7.1908 bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
-          RETRY apt-get update &&
-          RETRY apt-get dist-upgrade -y &&
-          install_minetest_debian_builddeps_nosudo &&
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
-          build_minetest_server_gnulinux_amd64 &&
+          build_minetest_server_gnulinux &&
+          get_appimage_tools &&
+          bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         '
@@ -85,10 +89,13 @@ jobs:
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
           install_minetest_archlinux_builddeps_nosudo &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
-          build_minetest_client_gnulinux_amd64 &&
+          build_minetest_client_gnulinux &&
+          get_appimage_tools &&
+          bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_archlinux.AppImage
         '
@@ -100,10 +107,13 @@ jobs:
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
           install_minetest_archlinux_builddeps_nosudo &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
-          build_minetest_server_gnulinux_amd64 &&
+          build_minetest_server_gnulinux &&
+          get_appimage_tools &&
+          bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage
         '
@@ -177,7 +187,7 @@ jobs:
 
 after_success:
   - |
-    if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then while true; do
+    do_publish(){
       cd /tmp/WORKSPACE
       git config --global user.email tsao-chi@the-lingo.org
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ'
@@ -191,4 +201,7 @@ after_success:
       git add .
       git commit -m 'deploy'
       git push && break
-    done; fi
+    }
+    if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
+      RETRY do_publish
+    fi
