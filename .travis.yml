@@ -187,6 +187,7 @@ jobs:
 
 after_success:
   - |
+    . ./lib.sh
     do_publish(){
       cd /tmp/WORKSPACE
       git config --global user.email tsao-chi@the-lingo.org
