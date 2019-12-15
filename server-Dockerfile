@@ -1,22 +1,29 @@
-FROM debian:stable-slim
+FROM alpine
 
-USER root
+RUN apk add --no-cache git build-base irrlicht-dev cmake bzip2-dev libpng-dev jpeg-dev libxxf86vm-dev mesa-dev sqlite-dev libogg-dev libvorbis-dev openal-soft-dev curl-dev freetype-dev zlib-dev gmp-dev jsoncpp-dev && \
+  cd /root && \
+  git clone --depth=1 https://github.com/minetest/minetest.git ./minetest && \
+  git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game && \
+  rm -fr ./minetest/games/minetest_game/.git && \
+  cd ./minetest && \
+  cmake . \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SERVER=TRUE \
+    -DBUILD_CLIENT=FALSE && \
+  make -j4 && \
+  make install DESTDIR=/root/out
 
-ENV APPIMAGE_EXTRACT_AND_RUN=1
+FROM alpine
 
-ADD ./lib.sh /tmp/WORKSPACE/lib.sh
+COPY --from=0 /root/out/usr/local/share/minetest /usr/local/share/minetest
+COPY --from=0 /root/out//usr/local/bin/minetestserver /usr/local/bin/minetestserver
+COPY --from=0 /root/out/usr/local/share/doc/minetest/minetest.conf.example /etc/minetest/minetest.conf
 
-RUN bash -c 'cd /tmp/WORKSPACE && \
-  . ./lib.sh && \
-  apt update && \
-  apt install -y git wget file && \
-  install_minetest_debian_builddeps_nosudo && \
-  get_minetest && \
-  build_minetest_server_gnulinux_amd64'
+RUN apk add --no-cache sqlite-libs curl gmp libstdc++ libgcc && adduser -D minetest
 
-FROM debian:stable-slim
+USER minetest
 
-ENV APPIMAGE_EXTRACT_AND_RUN=1
+EXPOSE 30000/udp
 
-COPY --from=0 /tmp/WORKSPACE/minetest/minetestserver.AppImage /usr/local/bin/minetestserver
-
+CMD ["/usr/local/bin/minetestserver", "--config", "/etc/minetest/minetest.conf"]
