@@ -81,6 +81,46 @@ jobs:
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
         '
+    - name: "GNU/Linux AMD64 Client (Alpine)"
+      os: linux
+      dist: xenial
+      script: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          install_minetest_alpine_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_client_gnulinux &&
+          install_appimage_tools_alpine_builddeps_nosudo &&
+          get_build_appimage_tools_alpine &&
+          install_alpine_glibc_nosudo && # linuxdeploy.AppImage depends on glibc
+          bundle_minetest_client_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
+        '
+    - name: "GNU/Linux AMD64 Server (Alpine)"
+      os: linux
+      dist: xenial
+      script: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          install_minetest_alpine_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_server_gnulinux &&
+          install_appimage_tools_alpine_builddeps_nosudo &&
+          get_build_appimage_tools_alpine &&
+          install_alpine_glibc_nosudo && # linuxdeploy.AppImage depends on glibc
+          bundle_minetest_server_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
+        '
     - name: "GNU/Linux AMD64 Client (Archlinux)"
       os: linux
       dist: xenial
