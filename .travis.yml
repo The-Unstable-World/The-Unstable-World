@@ -96,7 +96,7 @@ jobs:
           build_minetest_client_gnulinux &&
           install_appimage_tools_alpine_builddeps_nosudo &&
           get_build_appimage_tools_alpine &&
-          install_alpine_glibc_nosudo && # linuxdeploy.AppImage depends on glibc
+          install_linuxdeploy_deps_alpine_nosudo &&
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
@@ -116,7 +116,7 @@ jobs:
           build_minetest_server_gnulinux &&
           install_appimage_tools_alpine_builddeps_nosudo &&
           get_build_appimage_tools_alpine &&
-          install_alpine_glibc_nosudo && # linuxdeploy.AppImage depends on glibc
+          install_linuxdeploy_deps_alpine_nosudo &&
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
