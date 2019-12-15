@@ -113,6 +113,27 @@ install_minetest_centos7_builddeps_nosudo(){
   ln -s /usr/bin/cpack3 /usr/local/bin/cpack &&
   ln -s /usr/bin/ccmake3 /usr/local/bin/ccmake
 }
+install_alpine_glibc_nosudo(){
+  rm -fr /etc/apk/keys/sgerrand.rsa.pub /tmp/glibc.apk
+  RETRY wget -c -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub &&
+  RETRY wget -c -q -O /tmp/glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk &&
+  apk add /tmp/glibc.apk &&
+  rm /tmp/glibc.apk
+}
+install_minetest_alpine_builddeps_nosudo(){
+  RETRY apk add wget git build-base irrlicht-dev cmake bzip2-dev libpng-dev jpeg-dev libxxf86vm-dev mesa-dev sqlite-dev libogg-dev libvorbis-dev openal-soft-dev curl-dev freetype-dev zlib-dev gmp-dev jsoncpp-dev luajit-dev
+}
+install_appimage_tools_alpine_builddeps_nosudo(){
+  RETRY apk add bash wget git build-base gnupg zip subversion automake libtool patch zlib-dev cairo-dev openssl-dev cmake autoconf automake fuse-dev vim desktop-file-utils gtest-dev libxft-dev librsvg-dev curl ncurses-dev texinfo gdb xz libffi-dev gettext-dev argp-standalone &&
+  RETRY sh -c 'wget http://zsync.moria.org.uk/download/zsync-0.6.2.tar.bz2 -O - | tar -xvj' &&
+  (cd zsync-0.6.2 &&
+    ./configure &&
+    sed '1 i #include <sys/types.h>' -i ./libzsync/sha1.h &&
+    make -j4 &&
+    make install &&
+    cd .. &&
+    rm -fr zsync-0.6.2)
+}
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
 CONFIG_WIN_ARCH=x86_64
 install_minetest_mingw_builddeps__and__build__ubuntu1604(){
@@ -166,6 +187,25 @@ get_appimage_tools_noretry(){
   wget -O appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-"$APPIMATOOL_ARCH".AppImage &&
   chmod +x linuxdeploy.AppImage &&
   chmod +x appimagetool.AppImage
+}
+get_build_appimage_tools_alpine(){
+  local LINUXDEP_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
+  local APPIMATOOL_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
+  [ "$LINUXDEP_ARCH" = i686 ] && LINUXDEP_ARCH=i386
+  [ "$APPIMATOOL_ARCH" = i386 ] && APPIMATOOL_ARCH=i686
+  rm -fr linuxdeploy.AppImage appimagetool.AppImage
+
+  wget -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-"$LINUXDEP_ARCH".AppImage &&
+  chmod +x linuxdeploy.AppImage &&
+  git clone --single-branch --recursive https://github.com/AppImage/AppImageKit.git &&
+  (cd AppImageKit &&
+    find -name '*.h' | xargs sed -i 's/__END_DECLS//g' && # workaround about https://github.com/AppImage/AppImageKit/pull/1019
+    find -name '*.h' | xargs sed -i 's/__BEGIN_DECLS//g' &&
+    bash -ex build.sh &&
+    cd build/out &&
+    ./appimagetool.AppDir/AppRun ./appimagetool.AppDir/ -v \
+      ../../../appimagetool.AppImage) &&
+  rm -fr AppImageKit
 }
 get_appimage_tools(){
   RETRY get_appimage_tools_noretry
