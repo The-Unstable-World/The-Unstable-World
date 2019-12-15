@@ -85,8 +85,9 @@ jobs:
       os: linux
       dist: xenial
       script: |
+        . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+        COMMENT "(broken)" docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -105,8 +106,9 @@ jobs:
       os: linux
       dist: xenial
       script: |
+        . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+        COMMENT "(broken)" docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
