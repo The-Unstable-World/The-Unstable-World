@@ -113,11 +113,11 @@ install_minetest_centos7_builddeps_nosudo(){
   ln -s /usr/bin/cpack3 /usr/local/bin/cpack &&
   ln -s /usr/bin/ccmake3 /usr/local/bin/ccmake
 }
-install_alpine_glibc_nosudo(){
+install_linuxdeploy_deps_alpine_nosudo(){
   rm -fr /etc/apk/keys/sgerrand.rsa.pub /tmp/glibc.apk
   RETRY wget -c -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub &&
   RETRY wget -c -q -O /tmp/glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk &&
-  apk add /tmp/glibc.apk &&
+  apk add /tmp/glibc.apk zlib &&
   rm /tmp/glibc.apk
 }
 install_minetest_alpine_builddeps_nosudo(){
