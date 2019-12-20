@@ -17,7 +17,7 @@ RUN apk add --no-cache git build-base irrlicht-dev cmake bzip2-dev libpng-dev jp
 FROM alpine
 
 COPY --from=0 /root/out/usr/local/share/minetest /usr/local/share/minetest
-COPY --from=0 /root/out//usr/local/bin/minetestserver /usr/local/bin/minetestserver
+COPY --from=0 /root/out/usr/local/bin/minetestserver /usr/local/bin/minetestserver
 COPY --from=0 /root/out/usr/local/share/doc/minetest/minetest.conf.example /etc/minetest/minetest.conf
 
 RUN apk add --no-cache sqlite-libs curl gmp libstdc++ libgcc && adduser -D minetest
