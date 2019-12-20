@@ -89,6 +89,10 @@ minetest_osx_builddeps(){
 install_minetest_osx_builddeps(){
   RETRY brew install $(minetest_osx_builddeps)
 }
+install_osx_coreutils_and_set_PATH(){
+  RETRY brew install coreutils &&
+  export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+}
 minetest_debian_builddeps(){
   echo file wget git build-essential libirrlicht-dev cmake libbz2-dev libpng-dev libjpeg-dev libxxf86vm-dev libgl1-mesa-dev libsqlite3-dev libogg-dev libvorbis-dev libopenal-dev libcurl4-gnutls-dev libfreetype6-dev zlib1g-dev libgmp-dev libjsoncpp-dev
 }
