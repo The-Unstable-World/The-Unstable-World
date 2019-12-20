@@ -87,9 +87,11 @@ minetest_osx_builddeps(){
   echo freetype gettext irrlicht libogg libvorbis luajit
 }
 install_minetest_osx_builddeps(){
+  brew uninstall $(minetest_osx_builddeps) # in case already installed
   RETRY brew install $(minetest_osx_builddeps)
 }
 install_osx_coreutils_and_set_PATH(){
+  brew uninstall coreutils # in case already installed
   RETRY brew install coreutils &&
   export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 }
