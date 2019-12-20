@@ -19,6 +19,7 @@ jobs:
       install:
         - . ./lib.sh
         - RETRY brew update
+        - install_osx_coreutils_and_set_PATH
         - install_minetest_osx_builddeps
       script:
         - mkdir -p /tmp/WORKSPACE
