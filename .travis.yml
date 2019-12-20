@@ -48,7 +48,7 @@ jobs:
       dist: xenial
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7.7.1908 bash -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -67,7 +67,7 @@ jobs:
       dist: xenial
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7.7.1908 bash -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
