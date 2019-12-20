@@ -242,7 +242,7 @@ after_success:
       cd /tmp/WORKSPACE/deploy_repo
       cp -rv /tmp/WORKSPACE/DEPLOY/* ./
       git add .
-      git commit -m 'deploy'
+      git commit -m "deploy $(date -Iseconds)"
       git push && break
     }
     if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
