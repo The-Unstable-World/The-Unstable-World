@@ -59,6 +59,7 @@ mods_modpack(){
   echo \
     $(COMMENT http://git.bananach.space/advtrains.git "has some bug") \
     https://github.com/minetest-mods/mesecons.git \
+    https://github.com/minetest-mods/technic.git \
     https://github.com/stujones11/minetest-3d_armor.git \
     https://gitlab.com/VanessaE/plantlife_modpack.git \
 
