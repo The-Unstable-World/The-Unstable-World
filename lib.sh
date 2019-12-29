@@ -26,6 +26,10 @@ get_minetest(){
   RETRY git clone --depth=1 https://github.com/minetest/minetest_game.git ./minetest/games/minetest_game &&
   rm -fr ./minetest/games/minetest_game/.git)
 }
+apply_cheat_patch(){
+  # These clients are used to test anti-cheating mods
+  sed -i 's|{ return checkPrivilege(priv); }|{ return true; }|' ./minetest/src/client/client.h
+}
 mods_mod(){
   echo \
     https://github.com/D00Med/vehicles.git \
