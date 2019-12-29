@@ -19,7 +19,6 @@ jobs:
       install:
         - . ./lib.sh
         - RETRY brew update
-        - RETRY brew upgrade
         - install_osx_coreutils_and_set_PATH
         - install_minetest_osx_builddeps
       script:
@@ -36,7 +35,6 @@ jobs:
       install:
         - . ./lib.sh
         - RETRY brew update
-        - RETRY brew upgrade
         - install_osx_coreutils_and_set_PATH
         - install_minetest_osx_builddeps
       script:
