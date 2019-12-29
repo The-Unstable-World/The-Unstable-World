@@ -29,6 +29,23 @@ jobs:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
         - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
         - popd
+    - name: "MacOSX Client (Cheat)" # These clients are used to test anti-cheating mods
+      os: osx
+      osx_image: xcode8
+      install:
+        - . ./lib.sh
+        - RETRY brew update
+        - install_osx_coreutils_and_set_PATH
+        - install_minetest_osx_builddeps
+      script:
+        - mkdir -p /tmp/WORKSPACE
+        - pushd /tmp/WORKSPACE
+        - get_minetest
+        - apply_cheat_patch
+        - build_minetest_client_osx
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
+        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/cheat_client/macosx/minetest.zip
+        - popd
     - name: "MacOSX Client (MacOSX10.13+XCode9.4.1)"
       os: osx
       osx_image: xcode9.4
@@ -63,6 +80,26 @@ jobs:
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
+        '
+    - name: "GNU/Linux AMD64 Client (Cheat)" # These clients are used to test anti-cheating mods
+      os: linux
+      dist: xenial
+      script: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          apply_cheat_patch &&
+          build_minetest_client_gnulinux &&
+          get_appimage_tools &&
+          bundle_minetest_client_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64
         '
     - name: "GNU/Linux AMD64 Server"
       os: linux
