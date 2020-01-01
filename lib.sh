@@ -323,6 +323,7 @@ EOF
 cat << 'EOF' >> ./mods/other/random_messages/init.lua
 	random_messages.messages = {
 		"You need Rc to launch and control missiles",
+		"Do not let vehicles enter the water",
 		"To talk to only your team, start your messages with /t. For example, /t Hello team!",
 		"Use medkits to gradually restore your health.",
 		"Moving or fighting while using medkits will interrupt the healing process.",
