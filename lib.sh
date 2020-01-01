@@ -68,16 +68,18 @@ mods_modpack(){
     https://gitlab.com/VanessaE/plantlife_modpack.git \
 
 }
+CONFIG_MODS="$(mods_mod)"
+CONFIG_MODPACKS="$(mods_modpack)"
 # wmt_cfg = WORLD-MT-CONFIG
 get_mods__and__gen_wmt_cfg(){
-  for x in $(mods_mod);do
+  for x in $CONFIG_MODS;do
     local x_base="${x##*/}"
     local x_name="${x_base%.git}"
     RETRY git clone "$x" || return 1
     rm -fr "$x_name"/.git
   done
 
-  for x in $(mods_modpack);do
+  for x in $CONFIG_MODPACKS;do
     rm -fr MODPACK-TMP
     RETRY git clone "$x" MODPACK-TMP || return 1
     for subdir in MODPACK-TMP/*;do
@@ -271,6 +273,8 @@ Exec=minetestserver' > ./minetestserver.AppDir/usr/share/applications/minetestse
   ../appimagetool.AppImage minetestserver.AppDir minetestserver.AppImage)
 }
 job_mods(){
+  CONFIG_MODS="$(mods_mod)"
+  CONFIG_MODPACKS="$(mods_modpack)"
   (mkdir mods &&
   cd mods &&
   get_mods__and__gen_wmt_cfg &&
@@ -279,4 +283,38 @@ job_mods(){
   tar -czvf ../mods.tgz . &&
   cd .. &&
   rm -fr mods)
+}
+make_capturetheflag(){
+  CONFIG_MODS="https://github.com/D00Med/vehicles.git"
+  CONFIG_MODPACKS=""
+  (git clone --recursive https://github.com/MT-CTF/capturetheflag.git &&
+  cd capturetheflag &&
+    (mkdir mods/custom &&
+    cd mods/custom &&
+    get_mods__and__gen_wmt_cfg &&
+    rm WORLD-MT-CONFIG &&
+    echo 'name = custom' > modpack.conf) &&
+  ./update.sh &&
+  echo '
+local default_treasures = ctf_treasure.get_default_treasures()
+for _, v in ipairs{
+ { "vehicles:missile_2_item"     , 0.01, 2, 2 },
+ { "vehicles:rc"                 , 0.01, 2, 1 },
+ { "vehicles:helicopter_spawner" , 0.01, 2, 1 },
+ { "vehicles:plane_spawner"      , 0.01, 2, 1 }
+} do
+  table.insert(default_treasures, v)
+end
+function ctf_treasure.get_default_treasures()
+  return default_treasures
+end
+' >> ./mods/ctf/ctf_treasure/init.lua &&
+  rm -frv $(find -name .git))
+}
+job_capturetheflag(){
+  make_capturetheflag &&
+  (cd capturetheflag &&
+  zip -r ../capturetheflag.zip . &&
+  tar -czvf ../capturetheflag.tgz .) &&
+  rm -fr capturetheflag
 }
