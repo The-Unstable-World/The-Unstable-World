@@ -294,7 +294,6 @@ make_capturetheflag(){
     get_mods__and__gen_wmt_cfg &&
     rm WORLD-MT-CONFIG &&
     echo 'name = custom' > modpack.conf) &&
-  ./update.sh &&
   echo '
 local default_treasures = ctf_treasure.get_default_treasures()
 for _, v in ipairs{
