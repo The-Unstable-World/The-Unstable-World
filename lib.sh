@@ -303,12 +303,14 @@ make_capturetheflag(){
 cat << 'EOF' >> ./mods/ctf/ctf_treasure/init.lua
 local default_treasures = ctf_treasure.get_default_treasures()
 for _, v in ipairs{
+ { "default:cobble",              0.5, 5, { 78, 99 } },
+ { "default:wood",                0.5, 5, { 45, 99 } },
  { "shooter:shotgun",             0.3, 2, 1 },
  { "shooter:grenade",             0.3, 2, 1 },
  { "shooter:machine_gun",         0.3, 2, 1 },
  { "vehicles:missile_2_item",     0.3, 2, 5 },
  { "vehicles:rc",                 0.3, 2, 1 },
- { "vehicles:helicopter_spawner", 0.2, 2, 1 },
+ { "vehicles:apache_spawner",     0.2, 2, 1 },
  { "vehicles:plane_spawner",      0.2, 2, 1 }
 } do
   table.insert(default_treasures, v)
