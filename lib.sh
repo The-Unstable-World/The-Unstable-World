@@ -289,14 +289,14 @@ make_capturetheflag(){
   CONFIG_MODPACKS=""
   (git clone --recursive https://github.com/MT-CTF/capturetheflag.git &&
   cd capturetheflag &&
-    local native_mods="$(echo mods/*/*/ | xargs -r -n 1 basename)" &&
+  git clone --depth 1 https://github.com/minetest/minetest_game.git &&
+  rm -fr mods/mtg &&
+  mv minetest_game/mods mods/mtg &&
+  echo 'name = mtg' > mods/mtg/modpack.conf &&
+  rm -fr minetest_game &&
     (mkdir mods/custom &&
     cd mods/custom &&
     get_mods__and__gen_wmt_cfg &&
-    git clone --depth 1 https://github.com/minetest/minetest_game.git &&
-    mv minetest_game/mods/* ./ &&
-    rm -fr minetest_game &&
-    rm -fr $native_mods &&
     rm WORLD-MT-CONFIG &&
     echo 'name = custom' > modpack.conf) &&
   echo '
