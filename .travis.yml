@@ -1,7 +1,7 @@
 language: cpp
 jobs:
   include:
-    - name: "Mods and Games"
+    - name: "Mods"
       os: linux
       dist: bionic
       install:
@@ -11,6 +11,12 @@ jobs:
         - pushd /tmp/WORKSPACE/DEPLOY/mods
         - job_mods
         - popd
+    - name: "Games"
+      os: linux
+      dist: bionic
+      install:
+        - . ./lib.sh
+      script:
         - mkdir -p /tmp/WORKSPACE/DEPLOY/games
         - pushd /tmp/WORKSPACE/DEPLOY/games
         - job_capturetheflag
