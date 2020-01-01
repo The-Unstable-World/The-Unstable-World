@@ -300,7 +300,8 @@ make_capturetheflag(){
     get_mods__and__gen_wmt_cfg &&
     rm WORLD-MT-CONFIG &&
     echo 'name = custom' > modpack.conf) &&
-(cat << 'EOF' >> ./mods/ctf/ctf_treasure/init.lua
+  rm -fr $(find -name .git)) || return 1
+cat << 'EOF' >> ./capturetheflag/mods/ctf/ctf_treasure/init.lua || return 1
 local default_treasures = ctf_treasure.get_default_treasures()
 for _, v in ipairs{
  { "default:cobble",              0.5, 5, { 78, 99 } },
@@ -319,9 +320,7 @@ function ctf_treasure.get_default_treasures()
   return default_treasures
 end
 EOF
-)
-&&
-(cat << 'EOF' >> ./mods/other/random_messages/init.lua
+cat << 'EOF' >> ./capturetheflag/mods/other/random_messages/init.lua || return 1
 	random_messages.messages = {
 		"You need Rc to launch and control missiles",
 		"Do not let vehicles enter the water",
@@ -353,9 +352,6 @@ EOF
 		"Use /maps to view the maps catalog. It also contains license info and attribution details."
 	}
 EOF
-)
-&&
-  rm -fr $(find -name .git))
 }
 job_capturetheflag(){
   make_capturetheflag &&
