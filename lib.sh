@@ -312,7 +312,8 @@ for _, v in ipairs{
  { "vehicles:missile_2_item",     0.3, 2, 5 },
  { "vehicles:rc",                 0.3, 2, 1 },
  { "vehicles:apache_spawner",     0.2, 2, 1 },
- { "vehicles:plane_spawner",      0.2, 2, 1 }
+ { "vehicles:plane_spawner",      0.2, 2, 1 },
+ { "vehicles:backpack",           0.3, 2, 1 }
 } do
   table.insert(default_treasures, v)
 end
