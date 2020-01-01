@@ -318,7 +318,8 @@ end
 function ctf_treasure.get_default_treasures()
   return default_treasures
 end
-EOF)
+EOF
+)
 &&
 (cat << 'EOF' >> ./mods/other/random_messages/init.lua
 	random_messages.messages = {
@@ -351,7 +352,8 @@ EOF)
 		"Use /summary to check scores of the current match and the previous match.",
 		"Use /maps to view the maps catalog. It also contains license info and attribution details."
 	}
-EOF)
+EOF
+)
 &&
   rm -fr $(find -name .git))
 }
