@@ -292,6 +292,7 @@ make_capturetheflag(){
   git clone --depth 1 https://github.com/minetest/minetest_game.git &&
   rm -fr mods/mtg &&
   mv minetest_game/mods mods/mtg &&
+  rm -fr mods/mtg/give_initial_stuff &&
   echo 'name = mtg' > mods/mtg/modpack.conf &&
   rm -fr minetest_game &&
     (mkdir mods/custom &&
