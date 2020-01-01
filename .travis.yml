@@ -1,17 +1,19 @@
 language: cpp
 jobs:
   include:
-    - name: "Mods"
+    - name: "Mods and Games"
       os: linux
       dist: bionic
       install:
         - . ./lib.sh
       script:
-        - mkdir -p /tmp/WORKSPACE/work
-        - pushd /tmp/WORKSPACE/work
-        - job_mods
         - mkdir -p /tmp/WORKSPACE/DEPLOY/mods
-        - cp -v * /tmp/WORKSPACE/DEPLOY/mods
+        - pushd /tmp/WORKSPACE/DEPLOY/mods
+        - job_mods
+        - popd
+        - mkdir -p /tmp/WORKSPACE/DEPLOY/games
+        - pushd /tmp/WORKSPACE/DEPLOY/games
+        - job_capturetheflag
         - popd
     - name: "MacOSX Client"
       os: osx
