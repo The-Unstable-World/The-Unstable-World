@@ -1,6 +1,6 @@
 # The Unstable World
 
-A server using daily development build. Restart every 1 hour to update to the latest commit. You can download daily development builds of Minetest Client(Android/Windows/MacOSX/Linux) from https://github.com/The-Unstable-World/binary
+A server using development build. Restart every 100 min to update to the latest commit. You can download development builds of Minetest Client(Android/Windows/MacOSX/Linux) from https://github.com/The-Unstable-World/binary
 
 Address: s29.natfrp.org Port: 31111
 
