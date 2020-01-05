@@ -344,7 +344,7 @@ minetest.registered_tools["vehicles:rc"].on_use = function(item, placer, pointed
 		local inv = minetest.get_inventory({type="player", name=pname})
 		if inv:contains_item("main", "vehicles:missile_2_item") then
 			local remov = inv:remove_item("main", "vehicles:missile_2_item")
-			local obj = minetest.env:add_entity({x=playerpos.x+0+dir.x,y=playerpos.y+1.5+dir.y,z=playerpos.z+0+dir.z}, "vehicles:missile")
+			local obj = minetest.env:add_entity({x=playerpos.x+0+dir.x,y=playerpos.y+2+dir.y,z=playerpos.z+0+dir.z}, "vehicles:missile")
 			local object = obj:get_luaentity()
 			object.launcher = placer
 			object.vehicle = nil
