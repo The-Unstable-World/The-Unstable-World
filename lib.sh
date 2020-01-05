@@ -288,10 +288,11 @@ make_capturetheflag(){
   CONFIG_MODS="https://github.com/D00Med/vehicles.git"
   CONFIG_MODPACKS=""
   (mkdir capturetheflag &&
+  cd capturetheflag &&
   git clone --depth 1 https://github.com/minetest/minetest_game.git MTG &&
   git clone --recursive https://github.com/MT-CTF/capturetheflag.git CTF &&
+  rm -fr MTG/mods/give_initial_stuff CTF/mods/mtg CTF/mods/other/no_minimap CTF/mods/pvp/collisionbox &&
   mv MTG/mods CTF/menu CTF/game.conf CTF/minetest.conf CTF/README.md ./ &&
-  rm -fr mods/give_initial_stuff CTF/mods/mtg &&
   mv CTF/mods/* ./mods/ &&
     (mkdir mods/custom &&
     cd mods/custom &&
