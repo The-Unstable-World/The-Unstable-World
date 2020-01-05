@@ -291,7 +291,7 @@ make_capturetheflag(){
   cd capturetheflag &&
   git clone --depth 1 https://github.com/minetest/minetest_game.git MTG &&
   git clone --recursive https://github.com/MT-CTF/capturetheflag.git CTF &&
-  rm -fr MTG/mods/give_initial_stuff CTF/mods/mtg CTF/mods/other/no_minimap CTF/mods/pvp/collisionbox &&
+  rm -fr MTG/mods/give_initial_stuff CTF/mods/mtg &&
   mv MTG/mods CTF/menu CTF/game.conf CTF/minetest.conf CTF/README.md ./ &&
   mv CTF/mods/* ./mods/ &&
     (mkdir mods/custom &&
@@ -335,6 +335,24 @@ for _, v in ipairs{
   "You need Rc to launch and control missiles",
   "Do not let vehicles enter the water"
 } do table.insert(random_messages.messages, v) end
+EOF
+cat << 'EOF' >> ./capturetheflag/custom/vehicles/init.lua || return 1
+minetest.registered_tools["vehicles:rc"].on_use = function(item, placer, pointed_thing)
+		local dir = placer:get_look_dir()
+		local playerpos = placer:getpos()
+		local pname = placer:get_player_name()
+		local inv = minetest.get_inventory({type="player", name=pname})
+		if inv:contains_item("main", "vehicles:missile_2_item") then
+			local remov = inv:remove_item("main", "vehicles:missile_2_item")
+			local obj = minetest.env:add_entity({x=playerpos.x+0+dir.x,y=playerpos.y+1.5+dir.y,z=playerpos.z+0+dir.z}, "vehicles:missile")
+			local object = obj:get_luaentity()
+			object.launcher = placer
+			object.vehicle = nil
+			local vec = {x=dir.x*6,y=dir.y*6,z=dir.z*6}
+			obj:setvelocity(vec)
+			return item
+		end
+	end
 EOF
 }
 job_capturetheflag(){
