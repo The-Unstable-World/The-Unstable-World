@@ -336,7 +336,7 @@ for _, v in ipairs{
   "Do not let vehicles enter the water"
 } do table.insert(random_messages.messages, v) end
 EOF
-cat << 'EOF' >> ./capturetheflag/custom/vehicles/init.lua || return 1
+cat << 'EOF' >> ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 minetest.registered_tools["vehicles:rc"].on_use = function(item, placer, pointed_thing)
 		local dir = placer:get_look_dir()
 		local playerpos = placer:getpos()
