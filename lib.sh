@@ -287,20 +287,18 @@ job_mods(){
 make_capturetheflag(){
   CONFIG_MODS="https://github.com/D00Med/vehicles.git"
   CONFIG_MODPACKS=""
-  (git clone --recursive https://github.com/MT-CTF/capturetheflag.git &&
-  cd capturetheflag &&
-  git clone --depth 1 https://github.com/minetest/minetest_game.git &&
-  rm -fr mods/mtg &&
-  mv minetest_game/mods mods/mtg &&
-  rm -fr mods/mtg/give_initial_stuff &&
-  echo 'name = mtg' > mods/mtg/modpack.conf &&
-  rm -fr minetest_game &&
+  (mkdir capturetheflag &&
+  git clone --depth 1 https://github.com/minetest/minetest_game.git MTG &&
+  git clone --recursive https://github.com/MT-CTF/capturetheflag.git CTF &&
+  mv MTG/mods CTF/menu CTF/game.conf CTF/minetest.conf CTF/README.md ./ &&
+  rm -fr mods/give_initial_stuff CTF/mods/mtg &&
+  mv CTF/mods/* ./mods/ &&
     (mkdir mods/custom &&
     cd mods/custom &&
     get_mods__and__gen_wmt_cfg &&
     rm WORLD-MT-CONFIG &&
     echo 'name = custom' > modpack.conf) &&
-  rm -fr $(find -name .git)) || return 1
+  rm -fr MTG CTF) || return 1
 cat << 'EOF' >> ./capturetheflag/mods/ctf/ctf_treasure/init.lua || return 1
 do
 local default_treasures = ctf_treasure.get_default_treasures()
@@ -325,7 +323,7 @@ do local function patch_delete_messages()
     "Like CTF? Give feedback using /report, and consider donating at rubenwardy.com/donate",
     "Want to submit your own map? Visit ctf.rubenwardy.com to get involved.",
     "To report misbehaving players to moderators, please use /report <name> <action>"
-  } do for k, x in random_messages.messages do
+  } do for k, x in ipairs(random_messages.messages) do
   if to_del == x then table.remove(random_messages.messages, k) return patch_delete_messages() end
 end end end patch_delete_messages() end
 for _, v in ipairs{
