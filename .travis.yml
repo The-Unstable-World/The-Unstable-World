@@ -174,9 +174,8 @@ jobs:
       os: linux
       dist: bionic
       script: |
-        hwclock -w # https://wiki.archlinux.org/index.php/Pacman#Signature_from_%22User_%3Cemail@example.org%3E%22_is_unknown_trust,_installation_failed
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -193,9 +192,8 @@ jobs:
       os: linux
       dist: bionic
       script: |
-        hwclock -w # https://wiki.archlinux.org/index.php/Pacman#Signature_from_%22User_%3Cemail@example.org%3E%22_is_unknown_trust,_installation_failed
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
