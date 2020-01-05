@@ -302,10 +302,11 @@ make_capturetheflag(){
     echo 'name = custom' > modpack.conf) &&
   rm -fr $(find -name .git)) || return 1
 cat << 'EOF' >> ./capturetheflag/mods/ctf/ctf_treasure/init.lua || return 1
+do
 local default_treasures = ctf_treasure.get_default_treasures()
 for _, v in ipairs{
- { "default:cobble",              0.5, 5, { 78, 99 } },
- { "default:wood",                0.5, 5, { 45, 99 } },
+ { "default:cobble",              0.6, 5, { 78, 99 } },
+ { "default:wood",                0.6, 5, { 45, 99 } },
  { "shooter:shotgun",             0.3, 2, 1 },
  { "shooter:grenade",             0.3, 2, 1 },
  { "shooter:machine_gun",         0.3, 2, 1 },
@@ -314,44 +315,27 @@ for _, v in ipairs{
  { "vehicles:apache_spawner",     0.2, 2, 1 },
  { "vehicles:plane_spawner",      0.2, 2, 1 },
  { "vehicles:backpack",           0.3, 2, 1 }
-} do
-  table.insert(default_treasures, v)
-end
-function ctf_treasure.get_default_treasures()
-  return default_treasures
+} do table.insert(default_treasures, v) end
+function ctf_treasure.get_default_treasures() return default_treasures end
 end
 EOF
 cat << 'EOF' >> ./capturetheflag/mods/other/random_messages/init.lua || return 1
-	random_messages.messages = {
-		"You need Rc to launch and control missiles",
-		"Do not let vehicles enter the water",
-		"To talk to only your team, start your messages with /t. For example, /t Hello team!",
-		"Use medkits to gradually restore your health.",
-		"Moving or fighting while using medkits will interrupt the healing process.",
-		"Steel swords do more damage than guns, but you need to be up close.",
-		"Gain more score by killing more than you die, or by capturing the flag.",
-		"You gain more score the better the opponent you defeat.",
-		"Find weapons in chests or mine and use furnaces to make stronger swords.",
-		"Players are immune to attack for 15 seconds after they respawn.",
-		"Access the pro section of the chest by achieving a 10k+ score and killing 3 people for every 2 deaths.",
-		"Use team doors (steel) to stop the enemy walking into your base.",
-		"Craft 4 cobbles and 1 steel ingot together to make reinforced cobble.",
-		"Sprint by pressing the fast key (E) when you have stamina.",
-		"Like CTF? Give feedback at https://github.com/The-Unstable-World/The-Unstable-World/issues, and consider donating",
-		"Want to submit your own map? Visit ctf.rubenwardy.com (Upstream, Not this server's website) to get involved.",
-		"Using limited resources for building structures that don't strengthen your base's defences is discouraged.",
-		"To report misbehaving players to moderators, please use https://github.com/The-Unstable-World/The-Unstable-World/issues",
-		"Swearing, trolling and being rude will not be tolerated and strict action will be taken.",
-		"Trapping team mates on purpose is strictly against the rules and you will be kicked immediately.",
-		"Help your team claim victory by storing extra weapons in the team chest, and never taking more than you need.",
-		"Excessive spawn-killing is a direct violation of the rules - appropriate punishments will be given.",
-		"Use /r to check your score and rank, and /rankings to see the league tables.",
-		"Use /r <number> or /rn <number> to check the rankings of the player in the given rank.",
-		"Use bandages on team-mates to heal them by 3-4 HP if their health is below 15 HP.",
-		"Use /m to add a team marker at pointed location, that's visible only to team-mates.",
-		"Use /summary to check scores of the current match and the previous match.",
-		"Use /maps to view the maps catalog. It also contains license info and attribution details."
-	}
+do local function patch_delete_messages()
+  for _, to_del in ipairs{
+    "Like CTF? Give feedback using /report, and consider donating at rubenwardy.com/donate",
+    "Want to submit your own map? Visit ctf.rubenwardy.com to get involved.",
+    "To report misbehaving players to moderators, please use /report <name> <action>"
+  } do for k, x in random_messages.messages do
+  if to_del == x then table.remove(random_messages.messages, k) return patch_delete_messages() end
+end end end patch_delete_messages() end
+for _, v in ipairs{
+  "Like CTF? Give feedback at https://github.com/The-Unstable-World/The-Unstable-World/issues, and consider donating",
+  "Want to submit your own map? Visit ctf.rubenwardy.com (Upstream, Not this server's website) to get involved.",
+  "To report misbehaving players to moderators, please use https://github.com/The-Unstable-World/The-Unstable-World/issues",
+
+  "You need Rc to launch and control missiles",
+  "Do not let vehicles enter the water"
+} do table.insert(random_messages.messages, v) end
 EOF
 }
 job_capturetheflag(){
