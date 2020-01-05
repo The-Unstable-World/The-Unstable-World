@@ -72,7 +72,7 @@ jobs:
         - popd
     - name: "GNU/Linux AMD64 Client"
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
@@ -91,7 +91,7 @@ jobs:
         '
     - name: "GNU/Linux AMD64 Client (Cheat)" # These clients are used to test anti-cheating mods
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
@@ -111,7 +111,7 @@ jobs:
         '
     - name: "GNU/Linux AMD64 Server"
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
@@ -130,7 +130,7 @@ jobs:
         '
     - name: "GNU/Linux AMD64 Client (Alpine)"
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
@@ -151,7 +151,7 @@ jobs:
         '
     - name: "GNU/Linux AMD64 Server (Alpine)"
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
@@ -172,7 +172,7 @@ jobs:
         '
     - name: "GNU/Linux AMD64 Client (Archlinux)"
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
@@ -190,7 +190,7 @@ jobs:
         '
     - name: "GNU/Linux AMD64 Server (Archlinux)"
       os: linux
-      dist: xenial
+      dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
         docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux bash -c '
