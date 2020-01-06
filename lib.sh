@@ -137,18 +137,11 @@ install_minetest_centos7_builddeps_nosudo(){
   RETRY yum install -y git file wget devtoolset-8-make automake devtoolset-8-gcc devtoolset-8-gcc-c++ kernel-devel llvm-toolset-7-cmake libcurl-devel openal-soft-devel libvorbis-devel libXxf86vm-devel libogg-devel freetype-devel mesa-libGL-devel zlib-devel jsoncpp-devel irrlicht-devel bzip2-libs gmp-devel sqlite-devel luajit-devel leveldb-devel ncurses-devel doxygen spatialindex-devel bzip2-devel &&
   ln -s /opt/rh/devtoolset-8/root/usr/bin/* /opt/rh/llvm-toolset-7/root/usr/bin/* /usr/local/bin
 }
-install_linuxdeploy_deps_alpine_nosudo(){
-  rm -fr /etc/apk/keys/sgerrand.rsa.pub /tmp/glibc.apk
-  RETRY wget -c -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub &&
-  RETRY wget -c -q -O /tmp/glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk &&
-  apk add /tmp/glibc.apk zlib &&
-  rm /tmp/glibc.apk
-}
 install_minetest_alpine_builddeps_nosudo(){
   RETRY apk add wget git build-base irrlicht-dev cmake bzip2-dev libpng-dev jpeg-dev libxxf86vm-dev mesa-dev sqlite-dev libogg-dev libvorbis-dev openal-soft-dev curl-dev freetype-dev zlib-dev gmp-dev jsoncpp-dev luajit-dev
 }
 install_appimage_tools_alpine_builddeps_nosudo(){
-  RETRY apk add bash wget git build-base gnupg zip subversion automake libtool patch zlib-dev cairo-dev openssl-dev cmake autoconf automake fuse-dev vim desktop-file-utils gtest-dev libxft-dev librsvg-dev curl ncurses-dev texinfo gdb xz libffi-dev gettext-dev argp-standalone &&
+  RETRY apk add bash wget git build-base gnupg zip subversion automake libtool patch zlib-dev cairo-dev openssl-dev cmake autoconf automake fuse-dev vim desktop-file-utils gtest-dev libxft-dev librsvg-dev curl ncurses-dev texinfo gdb xz libffi-dev gettext-dev argp-standalone patchelf jpeg-dev libpng-dev nano &&
   RETRY sh -c 'wget http://zsync.moria.org.uk/download/zsync-0.6.2.tar.bz2 -O - | tar -xvj' &&
   (cd zsync-0.6.2 &&
     ./configure &&
@@ -212,15 +205,13 @@ get_appimage_tools_noretry(){
   chmod +x linuxdeploy.AppImage &&
   chmod +x appimagetool.AppImage
 }
-get_build_appimage_tools_alpine(){
+get_and_build_appimage_tools_alpine(){
   local LINUXDEP_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
   local APPIMATOOL_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
   [ "$LINUXDEP_ARCH" = i686 ] && LINUXDEP_ARCH=i386
   [ "$APPIMATOOL_ARCH" = i386 ] && APPIMATOOL_ARCH=i686
   rm -fr linuxdeploy.AppImage appimagetool.AppImage
 
-  wget -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-"$LINUXDEP_ARCH".AppImage &&
-  chmod +x linuxdeploy.AppImage &&
   git clone --single-branch --recursive https://github.com/AppImage/AppImageKit.git &&
   (cd AppImageKit &&
     find -name '*.h' | xargs sed -i 's/__END_DECLS//g' && # workaround about https://github.com/AppImage/AppImageKit/pull/1019
@@ -229,7 +220,17 @@ get_build_appimage_tools_alpine(){
     cd build/out &&
     ./appimagetool.AppDir/AppRun ./appimagetool.AppDir/ -v \
       ../../../appimagetool.AppImage) &&
-  rm -fr AppImageKit
+  rm -fr AppImageKit &&
+
+  git clone --single-branch --recursive https://github.com/linuxdeploy/linuxdeploy.git &&
+  (cd linuxdeploy &&
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr -DUSE_SYSTEM_CIMG=Off -DUSE_CCACHE=Off &&
+    make -j4 &&
+    # deploy patchelf which is a dependency of linuxdeploy
+    bin/linuxdeploy "--appdir" "AppDir" "-e" "bin/linuxdeploy" "-i" "./resources/linuxdeploy.png" "-d" "./resources/linuxdeploy.desktop" "-e" "$(which patchelf)" "-e" "$(which strip)" &&
+    ../appimagetool.AppImage AppDir ../linuxdeploy.AppImage
+  ) &&
+  rm -fr linuxdeploy
 }
 get_appimage_tools(){
   RETRY get_appimage_tools_noretry
