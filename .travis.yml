@@ -142,8 +142,8 @@ jobs:
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_client_gnulinux &&
-          install_appimage_tools_alpine_builddeps_nosudo &&
-          get_and_build_appimage_tools_alpine &&
+          install_appimage_tools_alpine_deps_nosudo &&
+          get_appimage_tools &&
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
@@ -162,8 +162,8 @@ jobs:
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_server_gnulinux &&
-          install_appimage_tools_alpine_builddeps_nosudo &&
-          get_and_build_appimage_tools_alpine &&
+          install_appimage_tools_alpine_deps_nosudo &&
+          get_appimage_tools &&
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
