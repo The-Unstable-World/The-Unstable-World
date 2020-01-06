@@ -134,7 +134,7 @@ jobs:
       script: |
         . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
-        COMMENT "(broken)" docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -143,8 +143,7 @@ jobs:
           get_minetest &&
           build_minetest_client_gnulinux &&
           install_appimage_tools_alpine_builddeps_nosudo &&
-          get_build_appimage_tools_alpine &&
-          install_linuxdeploy_deps_alpine_nosudo &&
+          get_and_build_appimage_tools_alpine &&
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
@@ -155,7 +154,7 @@ jobs:
       script: |
         . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
-        COMMENT "(broken)" docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -164,8 +163,7 @@ jobs:
           get_minetest &&
           build_minetest_server_gnulinux &&
           install_appimage_tools_alpine_builddeps_nosudo &&
-          get_build_appimage_tools_alpine &&
-          install_linuxdeploy_deps_alpine_nosudo &&
+          get_and_build_appimage_tools_alpine &&
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
