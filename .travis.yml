@@ -147,7 +147,8 @@ jobs:
           bundle_minetest_client_gnulinux_appdir_nolibs &&
           build_alpine_rootfs ./minetest/minetest.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit irrlicht zlib libpng jpeg libogg libvorbis openal-soft freetype &&
           ln -s usr/bin/minetest usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/net.minetest.minetest.desktop ./minetest/minetest.AppDir &&
-          ln -s usr/bin/minetest./minetest/minetest.AppDir/AppRun &&
+          echo -e '#!/bin/sh\nLD_LIBRARY_PATH="$PWD/lib:$PWD/usr/lib" exec usr/bin/minetest "$@"' > ./minetest/minetest.AppDir/AppRun &&
+          chmod +x ./minetest/minetest.AppDir/AppRun &&
           ./appimagetool.AppImage ./minetest/minetest.AppDir ./minetest/minetest.AppImage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
@@ -171,7 +172,8 @@ jobs:
           bundle_minetest_server_gnulinux_appdir_nolibs &&
           build_alpine_rootfs ./minetest/minetestserver.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit zlib &&
           ln -s usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/minetestserver.desktop ./minetest/minetestserver.AppDir &&
-          ln -s usr/bin/minetestserver ./minetest/minetestserver.AppDir/AppRun &&
+          echo -e '#!/bin/sh\nLD_LIBRARY_PATH="$PWD/lib:$PWD/usr/lib" exec usr/bin/minetestserver "$@"' > ./minetest/minetestserver.AppDir/AppRun &&
+          chmod +x ./minetest/minetestserver.AppDir/AppRun &&
           ./appimagetool.AppImage ./minetest/minetestserver.AppDir ./minetest/minetestserver.AppImage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
