@@ -140,14 +140,6 @@ install_minetest_centos7_builddeps_nosudo(){
 install_minetest_alpine_builddeps_nosudo(){
   RETRY apk add wget git build-base irrlicht-dev cmake bzip2-dev libpng-dev jpeg-dev libxxf86vm-dev mesa-dev sqlite-dev libogg-dev libvorbis-dev openal-soft-dev curl-dev freetype-dev zlib-dev gmp-dev jsoncpp-dev luajit-dev
 }
-install_appimage_tools_alpine_deps_nosudo(){
-  RETRY apk add dpkg || return 1
-  for p in libgcc1 libc6 gcc-6-base libstdc++6 ; do
-    RETRY wget $(RETRY wget -O - https://packages.debian.org/stretch/amd64/$p/download | grep ftp.us.debian.org | head -1 | sed 's|^.*"\(http[^"]*\)".*$|\1|') || return 1
-  done
-  dpkg -i --force-all *.deb &&
-  rm -fr *.deb
-}
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
 CONFIG_WIN_ARCH=x86_64
 install_minetest_mingw_builddeps__and__build__ubuntu1604(){
@@ -190,20 +182,61 @@ build_minetest_client_osx(){
   make -j4 package)
 }
 CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
-get_appimage_tools_noretry(){
+get_appimage_and_linuxdeploy(){
   local LINUXDEP_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
   local APPIMATOOL_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
   [ "$LINUXDEP_ARCH" = i686 ] && LINUXDEP_ARCH=i386
   [ "$APPIMATOOL_ARCH" = i386 ] && APPIMATOOL_ARCH=i686
   rm -fr linuxdeploy.AppImage appimagetool.AppImage
 
-  wget -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-"$LINUXDEP_ARCH".AppImage &&
-  wget -O appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-"$APPIMATOOL_ARCH".AppImage &&
+  RETRY wget --continue -O linuxdeploy.AppImage https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-"$LINUXDEP_ARCH".AppImage &&
+  RETRY wget --continue -O appimagetool.AppImage https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-"$APPIMATOOL_ARCH".AppImage &&
   chmod +x linuxdeploy.AppImage &&
   chmod +x appimagetool.AppImage
 }
-get_appimage_tools(){
-  RETRY get_appimage_tools_noretry
+build_linuxdeploy_bundle_all_amd64_or_i386_docker_nosudo(){
+  local LINUXDEP_ARCH="$CONFIG_APPIMAGE_TOOLS_ARCH"
+  [ "$LINUXDEP_ARCH" = i686 ] && LINUXDEP_ARCH=i386
+  RETRY git clone --single-branch --recursive https://github.com/linuxdeploy/linuxdeploy.git || exit 1
+  echo '#!/bin/bash' > linuxdeploy/src/core/generate-excludelist.sh
+cat << 'EOF' > linuxdeploy/src/core/excludelist.h
+#include <string>
+#include <vector>
+
+static const std::vector<std::string> generatedExcludelist = {};
+EOF
+  rm -fr linuxdeploy.AppImage &&
+  (cd linuxdeploy &&
+    ./travis/build-centos6-docker.sh &&
+    mv linuxdeploy-*.AppImage ../linuxdeploy.AppImage
+    ) &&
+  rm -fr linuxdeploy
+}
+install_linuxdeploy_alpine_deps_nosudo(){
+  RETRY wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub &&
+  RETRY wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.30-r0/glibc-2.30-r0.apk &&
+  RETRY apk add glibc-2.30-r0.apk
+}
+build_appimage_install_builddeps_alpine_nosudo(){
+  RETRY apk add bash wget git build-base gnupg zip subversion automake libtool patch zlib-dev cairo-dev openssl-dev cmake autoconf automake fuse-dev vim desktop-file-utils gtest-dev libxft-dev librsvg-dev curl ncurses-dev texinfo gdb xz libffi-dev gettext-dev argp-standalone &&
+  RETRY sh -c 'wget http://zsync.moria.org.uk/download/zsync-0.6.2.tar.bz2 -O - | tar -xvj' &&
+  (cd zsync-0.6.2 &&
+    ./configure &&
+    sed '1 i #include <sys/types.h>' -i ./libzsync/sha1.h &&
+    make -j4 &&
+    make install &&
+    cd .. &&
+    rm -fr zsync-0.6.2) &&
+  git clone --single-branch --recursive https://github.com/AppImage/AppImageKit.git &&
+  rm -fr appimagetool.AppImage &&
+  (cd AppImageKit &&
+    find -name '*.h' | xargs sed -i 's/__END_DECLS//g' && # workaround about https://github.com/AppImage/AppImageKit/pull/1019
+    find -name '*.h' | xargs sed -i 's/__BEGIN_DECLS//g' &&
+    bash -ex build.sh &&
+    cd build/out &&
+    ./appimagetool.AppDir/AppRun ./appimagetool.AppDir/ -v \
+      ../../../appimagetool.AppImage) &&
+  rm -fr AppImageKit
 }
 build_minetest_client_gnulinux(){
   (cd ./minetest &&
@@ -214,11 +247,23 @@ build_minetest_client_gnulinux(){
     -DBUILD_SERVER=FALSE &&
   make -j4)
 }
-bundle_minetest_client_gnulinux_appimage(){
+bundle_minetest_client_gnulinux_appdir_nolibs(){
   (cd ./minetest &&
-  make install DESTDIR=minetest.AppDir &&
+  make install DESTDIR=minetest.AppDir)
+}
+bundle_minetest_client_gnulinux_appimage(){
+  bundle_minetest_client_gnulinux_appdir_nolibs &&
+  (cd ./minetest &&
   ../linuxdeploy.AppImage --appdir minetest.AppDir &&
   ../appimagetool.AppImage minetest.AppDir minetest.AppImage)
+}
+CONFIG_ALPINE_ROOTFS_ARCH=x86_64
+build_alpine_rootfs(){
+  local r="$1"
+  shift
+  (wget -O - http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/"$CONFIG_ALPINE_ROOTFS_ARCH"/alpine-minirootfs-3.11.2-x86_64.tar.gz | tar -xzC "$r") &&
+  RETRY apk add --no-cache --root "$r" "$@" &&
+  apk del --root "$r" alpine-keys apk-tools
 }
 build_minetest_server_gnulinux(){
   (cd ./minetest &&
@@ -229,7 +274,7 @@ build_minetest_server_gnulinux(){
     -DBUILD_CLIENT=FALSE &&
   make -j4)
 }
-bundle_minetest_server_gnulinux_appimage(){
+bundle_minetest_server_gnulinux_appdir_nolibs(){
   (cd ./minetest &&
   make install DESTDIR=minetestserver.AppDir &&
   rm ./minetestserver.AppDir/usr/share/applications/* &&
@@ -238,8 +283,11 @@ Name=MinetestServer
 Icon=minetest
 Type=Application
 Categories=Game;Simulation;
-Exec=minetestserver' > ./minetestserver.AppDir/usr/share/applications/minetestserver.desktop &&
-  get_appimage_tools &&
+Exec=minetestserver' > ./minetestserver.AppDir/usr/share/applications/minetestserver.desktop)
+}
+bundle_minetest_server_gnulinux_appimage(){
+  bundle_minetest_server_gnulinux_appdir_nolibs &&
+  (cd ./minetest &&
   ../linuxdeploy.AppImage --appdir minetestserver.AppDir &&
   ../appimagetool.AppImage minetestserver.AppDir minetestserver.AppImage)
 }
