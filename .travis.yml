@@ -84,7 +84,7 @@ jobs:
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_client_gnulinux &&
-          get_appimage_tools &&
+          get_appimage_and_linuxdeploy &&
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
@@ -104,7 +104,7 @@ jobs:
           get_minetest &&
           apply_cheat_patch &&
           build_minetest_client_gnulinux &&
-          get_appimage_tools &&
+          get_appimage_and_linuxdeploy &&
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64
@@ -123,7 +123,7 @@ jobs:
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_server_gnulinux &&
-          get_appimage_tools &&
+          get_appimage_and_linuxdeploy &&
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
@@ -138,13 +138,17 @@ jobs:
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          CONFIG_ALPINE_ROOTFS_ARCH=x86_64
           install_minetest_alpine_builddeps_nosudo &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_client_gnulinux &&
-          install_appimage_tools_alpine_deps_nosudo &&
-          get_appimage_tools &&
-          bundle_minetest_client_gnulinux_appimage &&
+          build_appimage_install_builddeps_alpine_nosudo &&
+          bundle_minetest_client_gnulinux_appdir_nolibs &&
+          build_alpine_rootfs ./minetest/minetest.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit irrlicht zlib libpng jpeg libogg libvorbis openal-soft freetype &&
+          ln -s usr/bin/minetest usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/net.minetest.minetest.desktop ./minetest/minetest.AppDir &&
+          ln -s usr/bin/minetest./minetest/minetest.AppDir/AppRun &&
+          ./appimagetool.AppImage ./minetest/minetest.AppDir ./minetest/minetest.AppImage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
         '
@@ -158,13 +162,17 @@ jobs:
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          CONFIG_ALPINE_ROOTFS_ARCH=x86_64
           install_minetest_alpine_builddeps_nosudo &&
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_server_gnulinux &&
-          install_appimage_tools_alpine_deps_nosudo &&
-          get_appimage_tools &&
-          bundle_minetest_server_gnulinux_appimage &&
+          build_appimage_install_builddeps_alpine_nosudo &&
+          bundle_minetest_server_gnulinux_appdir_nolibs &&
+          build_alpine_rootfs ./minetest/minetestserver.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit zlib &&
+          ln -s usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/minetestserver.desktop ./minetest/minetestserver.AppDir &&
+          ln -s usr/bin/minetestserver ./minetest/minetestserver.AppDir/AppRun &&
+          ./appimagetool.AppImage ./minetest/minetestserver.AppDir ./minetest/minetestserver.AppImage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
         '
@@ -181,7 +189,7 @@ jobs:
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_client_gnulinux &&
-          get_appimage_tools &&
+          get_appimage_and_linuxdeploy &&
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_archlinux.AppImage
@@ -199,7 +207,7 @@ jobs:
           cd /tmp/WORKSPACE &&
           get_minetest &&
           build_minetest_server_gnulinux &&
-          get_appimage_tools &&
+          get_appimage_and_linuxdeploy &&
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage
