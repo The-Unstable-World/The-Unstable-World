@@ -266,7 +266,7 @@ build_alpine_rootfs(){
   local builtinfiles="$(find "$tmp" -type f)"
   RETRY apk add --no-cache --root "$tmp" "$@" || return 1
   rm -fr $builtinfiles
-  cp -r "$tmp"/* "$r"/ || return 1
+  cp -r "$tmp"/* "$r"/
   rm -fr "$tmp"
 }
 build_minetest_server_gnulinux(){
