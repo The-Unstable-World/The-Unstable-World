@@ -268,6 +268,7 @@ build_alpine_rootfs(){
   rm -fr $builtinfiles
   cp -r "$tmp"/* "$r"/
   rm -fr "$tmp"
+  true
 }
 build_minetest_server_gnulinux(){
   (cd ./minetest &&
