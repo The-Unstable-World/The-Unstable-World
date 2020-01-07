@@ -260,10 +260,14 @@ bundle_minetest_client_gnulinux_appimage(){
 CONFIG_ALPINE_ROOTFS_ARCH=x86_64
 build_alpine_rootfs(){
   local r="$1"
+  local tmp="$(mktemp -d)"
   shift
-  (wget -O - http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/"$CONFIG_ALPINE_ROOTFS_ARCH"/alpine-minirootfs-3.11.2-x86_64.tar.gz | tar -xzC "$r") &&
-  RETRY apk add --no-cache --root "$r" "$@" &&
-  apk del --root "$r" alpine-keys apk-tools
+  (wget -O - http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/"$CONFIG_ALPINE_ROOTFS_ARCH"/alpine-minirootfs-3.11.2-x86_64.tar.gz | tar -xzC "$tmp") || return 1
+  local builtinfiles="$(find "$tmp" -type f)"
+  RETRY apk add --no-cache --root "$tmp" "$@" || return 1
+  rm -fr $builtinfiles
+  cp -r "$tmp"/* "$r"/ || return 1
+  rm -fr "$tmp"
 }
 build_minetest_server_gnulinux(){
   (cd ./minetest &&
