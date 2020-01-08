@@ -75,7 +75,7 @@ jobs:
       dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -88,13 +88,13 @@ jobs:
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
-        '
+        EOF
     - name: "GNU/Linux AMD64 Client (Cheat)" # These clients are used to test anti-cheating mods
       os: linux
       dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -108,13 +108,13 @@ jobs:
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64
-        '
+        EOF
     - name: "GNU/Linux AMD64 Server"
       os: linux
       dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -127,14 +127,14 @@ jobs:
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
-        '
+        EOF
     - name: "GNU/Linux AMD64 Client (Alpine)"
       os: linux
       dist: bionic
       script: |
         . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -152,14 +152,14 @@ jobs:
           ./appimagetool.AppImage ./minetest/minetest.AppDir ./minetest/minetest.AppImage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
-        '
+        EOF
     - name: "GNU/Linux AMD64 Server (Alpine)"
       os: linux
       dist: bionic
       script: |
         . ./lib.sh
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -177,13 +177,13 @@ jobs:
           ./appimagetool.AppImage ./minetest/minetestserver.AppDir ./minetest/minetestserver.AppImage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
-        '
+        EOF
     - name: "GNU/Linux AMD64 Client (Archlinux)"
       os: linux
       dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -195,13 +195,13 @@ jobs:
           bundle_minetest_client_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_archlinux.AppImage
-        '
+        EOF
     - name: "GNU/Linux AMD64 Server (Archlinux)"
       os: linux
       dist: bionic
       script: |
         mkdir -p /tmp/WORKSPACE &&
-        docker run -it --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash -c '
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash << 'EOF'
           export APPIMAGE_EXTRACT_AND_RUN=1
           . ./lib.sh
           CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
@@ -213,7 +213,7 @@ jobs:
           bundle_minetest_server_gnulinux_appimage &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage
-        '
+        EOF
     - name: "Windows AMD64 Client"
       os: linux
       dist: xenial
