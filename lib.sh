@@ -39,9 +39,9 @@ apply_cheat_patch(){
   sed -i 's|getintfield(L, table, "max_drop_level", toolcap.max_drop_level);|toolcap.max_drop_level = 3;|' ./minetest/src/script/common/c_content.cpp
   sed -i 's|getintfield(L, table_groupcap, "uses", groupcap.uses);|groupcap.uses = 0;|' ./minetest/src/script/common/c_content.cpp
   sed -i 's|getintfield(L, table_groupcap, "maxlevel", groupcap.maxlevel);|groupcap.maxlevel = 256;|' ./minetest/src/script/common/c_content.cpp
-  sed -i 's|groupcap.times[rating] = time;|groupcap.times[rating] = 42;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|groupcap.times\[rating\] = time;|groupcap.times[rating] = 42;|' ./minetest/src/script/common/c_content.cpp
   sed -i 's|def.range = getfloatfield_default(L, index, "range", def.range);|def.range = 256.0;|' ./minetest/src/script/common/c_content.cpp
-  sed -i 's|toolcap.damageGroups[groupname] = value;|toolcap.damageGroups["fleshy"] = 10;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|toolcap.damageGroups\[groupname\] = value;|toolcap.damageGroups["fleshy"] = 10;|' ./minetest/src/script/common/c_content.cpp
 
 }
 mods_mod(){
