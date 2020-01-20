@@ -28,7 +28,21 @@ get_minetest(){
 }
 apply_cheat_patch(){
   # These clients are used to test anti-cheating mods
-  sed -i 's|{ return checkPrivilege(priv); }|{ return true; }|' ./minetest/src/client/client.h
+
+  sed -i 's|{ return checkPrivilege(priv); }|{ return true; }|' ./minetest/src/client/client.h # checkLocalPrivilege
+  #sed -i 's|{ return (m_privileges.count(priv) != 0); }|{ return true; }|' ./minetest/src/client/client.h # checkPrivilege
+
+  sed -i 's|void Client::sendDamage(u16 damage)|void Client::realSendDamage(u16 damage)|' ./minetest/src/client/client.cpp
+  sed -i 's|void sendDamage(u16 damage);|void sendDamage(u16 damage) { };void realSendDamage(u16 damage);|' ./minetest/src/client/client.h
+
+  sed -i 's|getfloatfield(L, table, "full_punch_interval", toolcap.full_punch_interval);|toolcap.full_punch_interval = 0.5;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|getintfield(L, table, "max_drop_level", toolcap.max_drop_level);|toolcap.max_drop_level = 3;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|getintfield(L, table_groupcap, "uses", groupcap.uses);|groupcap.uses = 0;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|getintfield(L, table_groupcap, "maxlevel", groupcap.maxlevel);|groupcap.maxlevel = 256;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|groupcap.times[rating] = time;|groupcap.times[rating] = 42;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|def.range = getfloatfield_default(L, index, "range", def.range);|def.range = 256.0;|' ./minetest/src/script/common/c_content.cpp
+  sed -i 's|toolcap.damageGroups[groupname] = value;|toolcap.damageGroups["fleshy"] = 10;|' ./minetest/src/script/common/c_content.cpp
+
 }
 mods_mod(){
   echo \
