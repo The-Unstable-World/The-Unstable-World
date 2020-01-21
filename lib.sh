@@ -383,8 +383,8 @@ local old_get_objects_inside_radius = minetest.get_objects_inside_radius
 local function patched_get_objects_inside_radius(...) -- Fixed an issue where players could kill themselves with missiles
 	local return_v = {}
 	for _, obj in ipairs(old_get_objects_inside_radius(...)) do
-		if not (obj:get_luaentity() ~= nil and obj:get_luaentity().name == "ctf_playertag:tag") then
-			minetest.chat_send_all("DEBUG: hit " .. tostring(obj:get_luaentity() ~= nil and obj:get_luaentity().name))
+		local luae = obj:get_luaentity()
+		if not (luae ~= nil and (luae.name == "ctf_playertag:tag" or luae.name == "gauges:hp_bar")) then
 			return_v[#return_v+1]=obj
 		end
 	end
