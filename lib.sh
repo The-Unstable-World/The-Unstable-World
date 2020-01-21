@@ -384,8 +384,7 @@ local function patched_get_objects_inside_radius(...) -- Fixed an issue where pl
 	local return_v = {}
 	for _, obj in ipairs(old_get_objects_inside_radius(...)) do
 		local luae = obj:get_luaentity()
-		if not (luae ~= nil and (luae.name == "ctf_playertag:tag" or luae.name == "gauges:hp_bar")) then
-			if (luae ~= nil and luae.name ~= "vehicles:missile") then minetest.chat_send_all("DEBUG: hit " .. tostring(luae ~= nil and luae.name)) end
+		if not (luae ~= nil and (luae.name == "ctf_playertag:tag" or luae.name == "gauges:hp_bar" or luae.name == "wield3d:wield_entity")) then
 			return_v[#return_v+1]=obj
 		end
 	end
