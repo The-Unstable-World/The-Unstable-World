@@ -323,7 +323,7 @@ job_mods(){
   rm -fr mods)
 }
 make_capturetheflag(){
-  CONFIG_MODS="https://github.com/D00Med/vehicles.git"
+  CONFIG_MODS="https://github.com/D00Med/vehicles.git https://github.com/minetest-mods/item_drop.git"
   CONFIG_MODPACKS=""
   (mkdir capturetheflag &&
   cd capturetheflag &&
