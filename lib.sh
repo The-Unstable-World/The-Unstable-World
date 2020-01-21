@@ -391,7 +391,7 @@ minetest.registered_tools["vehicles:rc"].on_use = function(item, placer, pointed
 			obj:setvelocity(vec)
 			return item
 		end
-
+	end
 minetest.registered_entities["vehicles:apache"].hp_max = 1
 minetest.registered_entities["vehicles:plane"].hp_max = 1
 EOF
