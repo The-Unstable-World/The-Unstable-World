@@ -11,6 +11,8 @@ China: `140.143.209.194` `118.24.39.106`
 HK: `149.129.127.116` `34.92.117.215`
 Japan: `140.238.35.198` `35.200.26.47`
 
+Note: If other IPs don't work, try `157.230.170.43`
+
 ## Main Server
 
 A server using development build. Restart every 100 min to update to the latest commit.
