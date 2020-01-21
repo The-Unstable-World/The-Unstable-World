@@ -350,7 +350,7 @@ for _, v in ipairs{
  { "shooter:shotgun",             0.3, 2, 1 },
  { "shooter:grenade",             0.3, 2, 1 },
  { "shooter:machine_gun",         0.3, 2, 1 },
- { "vehicles:missile_2_item",     0.3, 2, { 3, 32 } },
+ { "vehicles:missile_2_item",     0.5, 2, { 3, 32 } },
  { "vehicles:rc",                 0.3, 2, 1 },
  { "vehicles:apache_spawner",     0.2, 2, 1 },
  { "vehicles:plane_spawner",      0.2, 2, 1 },
