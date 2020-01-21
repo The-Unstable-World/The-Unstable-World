@@ -344,6 +344,9 @@ local default_treasures = ctf_treasure.get_default_treasures()
 for _, v in ipairs{
  { "default:cobble",              0.6, 5, { 78, 99 } },
  { "default:wood",                0.6, 5, { 45, 99 } },
+ { "default:sword_steel",         0.6, 5, { 1, 10 } },
+ { "default:shovel_steel",        0.6, 5, { 1, 10 } },
+ { "default:shovel_steel",        0.6, 5, { 1, 10 } },
  { "shooter:shotgun",             0.3, 2, 1 },
  { "shooter:grenade",             0.3, 2, 1 },
  { "shooter:machine_gun",         0.3, 2, 1 },
