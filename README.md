@@ -26,6 +26,6 @@ list of mods: https://github.com/The-Unstable-World/binary/blob/master/mods/WORL
 
 This server is in alpha phase and may have many bugs. Use swords, guns, grenades, *planes* and *missiles* to combat the enemy and capture their flag before they capture yours. A server using custom Capture the Flag. Complete minetest and some mods included. Restart at the end of each match or when 100 minutes have been reached to update to the latest commit.
 
-Port: 30763
+Port: 30762
 
 mods: https://github.com/The-Unstable-World/binary/blob/master/games/capturetheflag.tgz
