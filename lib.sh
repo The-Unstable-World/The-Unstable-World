@@ -387,7 +387,7 @@ local function patched_get_objects_inside_radius(...) -- Fixed an issue where pl
 	return return_v
 end
 EOF
-sed 's|minetest.get_objects_inside_radius|patched_get_objects_inside_radius|' ./capturetheflag/mods/custom/vehicles/init.lua > ./capturetheflag/mods/custom/vehicles/init.lua.new || return 1
+sed 's|minetest.get_objects_inside_radius|patched_get_objects_inside_radius|' ./capturetheflag/mods/custom/vehicles/init.lua >> ./capturetheflag/mods/custom/vehicles/init.lua.new || return 1
 mv ./capturetheflag/mods/custom/vehicles/init.lua.new ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 cat << 'EOF' >> ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 minetest.registered_entities["vehicles:apache"].hp_max = 1
