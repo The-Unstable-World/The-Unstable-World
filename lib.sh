@@ -374,27 +374,26 @@ for _, v in ipairs{
   "Do not let vehicles enter the water"
 } do table.insert(random_messages.messages, v) end
 EOF
-cat << 'EOF' >> ./capturetheflag/mods/custom/vehicles/init.lua || return 1
-minetest.registered_tools["vehicles:rc"].on_use = function(item, placer, pointed_thing)
-		local dir = placer:get_look_dir()
-		local playerpos = placer:getpos()
-		local pname = placer:get_player_name()
-		local inv = minetest.get_inventory({type="player", name=pname})
-		if inv:contains_item("main", "vehicles:missile_2_item") then
-			local creative_mode = creative and creative.is_enabled_for and creative.is_enabled_for(placer:get_player_name())
-			if not creative_mode then inv:remove_item("main", "vehicles:missile_2_item") end
-			local obj = minetest.env:add_entity({x=playerpos.x+0+dir.x,y=playerpos.y+2+dir.y,z=playerpos.z+0+dir.z}, "vehicles:missile")
-			local object = obj:get_luaentity()
-			object.launcher = placer
-			object.vehicle = nil
-			local vec = {x=dir.x*6,y=dir.y*6,z=dir.z*6}
-			obj:setvelocity(vec)
-			return item
+
+cat << 'EOF' > ./capturetheflag/mods/custom/vehicles/init.lua.new || return 1
+local old_get_objects_inside_radius = minetest.get_objects_inside_radius
+local function patched_get_objects_inside_radius(...) -- Fixed an issue where players could kill themselves with missiles
+	local return_v = {}
+	for _, obj in ipairs(old_get_objects_inside_radius(...)) do
+		if not (obj:get_luaentity() ~= nil and obj:get_luaentity().name == "ctf_playertag:tag") then
+			return_v[#return_v+1]=obj
 		end
 	end
+	return return_v
+end
+EOF
+sed 's|minetest.get_objects_inside_radius|patched_get_objects_inside_radius|' ./capturetheflag/mods/custom/vehicles/init.lua > ./capturetheflag/mods/custom/vehicles/init.lua.new || return 1
+mv ./capturetheflag/mods/custom/vehicles/init.lua.new ./capturetheflag/mods/custom/vehicles/init.lua || return 1
+cat << 'EOF' >> ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 minetest.registered_entities["vehicles:apache"].hp_max = 1
 minetest.registered_entities["vehicles:plane"].hp_max = 1
 EOF
+
 }
 job_capturetheflag(){
   make_capturetheflag &&
