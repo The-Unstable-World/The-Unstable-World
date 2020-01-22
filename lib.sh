@@ -351,16 +351,22 @@ local to_insert = {
  { "shooter:shotgun",             0.3, 2, 1 },
  { "shooter:grenade",             0.3, 2, 1 },
  { "shooter:machine_gun",         0.3, 2, 1 },
+ { "medkits:medkit",              0.8, 5, { 4, 16 } },
+ { "ctf_bandages:bandage",        0.8, 2, { 4, 16 } },
  { "vehicles:missile_2_item",     0.5, 2, { 3, 32 } },
  { "vehicles:rc",                 0.3, 2, 1 },
  { "vehicles:apache_spawner",     0.2, 2, 1 },
  { "vehicles:plane_spawner",      0.2, 2, 1 },
  { "vehicles:backpack",           0.3, 2, 1 }
 }
+local to_delete = {
+ { "default:shovel_stone" },
+ { "default:axe_stone" }
+}
 local function patch_delete_treasures()
-  for _, v in ipairs(to_insert) do for k, default_v in ipairs(default_treasures)
+  for _, t in ipairs{to_insert, to_delete} do for _, v in ipairs(t) do for k, default_v in ipairs(default_treasures) do
     if v[1] == default_v[1] then table.remove(default_treasures, k) return patch_delete_treasures() end
-  end end
+  end end end
 end
 patch_delete_treasures()
 for _, v in ipairs(to_insert) do table.insert(default_treasures, v) end
