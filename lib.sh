@@ -341,12 +341,13 @@ make_capturetheflag(){
 cat << 'EOF' >> ./capturetheflag/mods/ctf/ctf_treasure/init.lua || return 1
 do
 local default_treasures = ctf_treasure.get_default_treasures()
-for _, v in ipairs{
+local to_insert = {
  { "default:cobble",              0.6, 5, { 78, 99 } },
  { "default:wood",                0.6, 5, { 45, 99 } },
  { "default:sword_steel",         0.6, 5, { 1, 10 } },
  { "default:shovel_steel",        0.6, 5, { 1, 10 } },
  { "default:shovel_steel",        0.6, 5, { 1, 10 } },
+ { "default:axe_steel",           0.6, 5, { 1, 10 } },
  { "shooter:shotgun",             0.3, 2, 1 },
  { "shooter:grenade",             0.3, 2, 1 },
  { "shooter:machine_gun",         0.3, 2, 1 },
@@ -355,7 +356,14 @@ for _, v in ipairs{
  { "vehicles:apache_spawner",     0.2, 2, 1 },
  { "vehicles:plane_spawner",      0.2, 2, 1 },
  { "vehicles:backpack",           0.3, 2, 1 }
-} do table.insert(default_treasures, v) end
+}
+local function patch_delete_treasures()
+  for _, v in ipairs(to_insert) do for k, default_v in ipairs(default_treasures)
+    if v[1] == default_v[1] then table.remove(default_treasures, k) return patch_delete_treasures() end
+  end end
+end
+patch_delete_treasures()
+for _, v in ipairs(to_insert) do table.insert(default_treasures, v) end
 function ctf_treasure.get_default_treasures() return default_treasures end
 end
 EOF
@@ -366,8 +374,11 @@ do local function patch_delete_messages()
     "Want to submit your own map? Visit ctf.rubenwardy.com to get involved.",
     "To report misbehaving players to moderators, please use /report <name> <action>"
   } do for k, x in ipairs(random_messages.messages) do
-  if to_del == x then table.remove(random_messages.messages, k) return patch_delete_messages() end
-end end end patch_delete_messages() end
+    if to_del == x then table.remove(random_messages.messages, k) return patch_delete_messages() end
+  end end
+end
+patch_delete_messages()
+end
 for _, v in ipairs{
   "Like CTF? Give feedback at https://github.com/The-Unstable-World/The-Unstable-World/issues, and consider donating",
   "Want to submit your own map? Visit ctf.rubenwardy.com (Upstream, Not this server's website) to get involved.",
@@ -398,6 +409,11 @@ minetest.registered_entities["vehicles:apache"].hp_max = 1
 minetest.registered_entities["vehicles:plane"].hp_max = 1
 EOF
 
+for m in caverns maze nether_kingdom tunnel ;do
+rm -fr "./capturetheflag/mods/ctf/ctf_map/ctf_map_core/maps/$m"
+done
+sed -i 's|default:sword_stone|default:sword_steel|' ./capturetheflag/mods/ctf/ctf_map/ctf_map_core/maps/*/map.conf
+sed -i 's|default:pick_stone|default:pick_steel|' ./capturetheflag/mods/ctf/ctf_map/ctf_map_core/maps/*/map.conf
 }
 job_capturetheflag(){
   make_capturetheflag &&
