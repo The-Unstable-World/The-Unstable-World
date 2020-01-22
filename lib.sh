@@ -411,7 +411,7 @@ sed 's|minetest.get_objects_inside_radius|patched_get_objects_inside_radius|' ./
 mv ./capturetheflag/mods/custom/vehicles/init.lua.new ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 cat << 'EOF' >> ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 for _, v in ipairs{"vehicles:apache"} do
-  minetest.registered_entities[t].hp_max = 1
+  minetest.registered_entities[v].hp_max = 1
 end
 EOF
 
