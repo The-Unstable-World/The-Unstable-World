@@ -355,8 +355,7 @@ local to_insert = {
  { "ctf_bandages:bandage",        0.8, 2, { 4, 16 } },
  { "vehicles:missile_2_item",     0.5, 2, { 3, 32 } },
  { "vehicles:rc",                 0.3, 2, 1 },
- { "vehicles:apache_spawner",     0.2, 2, 1 },
- { "vehicles:plane_spawner",      0.2, 2, 1 },
+ { "vehicles:apache_spawner",     0.4, 2, 1 },
  { "vehicles:backpack",           0.3, 2, 1 }
 }
 local to_delete = {
@@ -411,8 +410,9 @@ EOF
 sed 's|minetest.get_objects_inside_radius|patched_get_objects_inside_radius|' ./capturetheflag/mods/custom/vehicles/init.lua >> ./capturetheflag/mods/custom/vehicles/init.lua.new || return 1
 mv ./capturetheflag/mods/custom/vehicles/init.lua.new ./capturetheflag/mods/custom/vehicles/init.lua || return 1
 cat << 'EOF' >> ./capturetheflag/mods/custom/vehicles/init.lua || return 1
-minetest.registered_entities["vehicles:apache"].hp_max = 1
-minetest.registered_entities["vehicles:plane"].hp_max = 1
+for _, v in ipairs{"vehicles:apache"} do
+  minetest.registered_entities[t].hp_max = 1
+end
 EOF
 
 for m in caverns maze nether_kingdom tunnel ;do
