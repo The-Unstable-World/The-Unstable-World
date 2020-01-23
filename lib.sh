@@ -276,11 +276,15 @@ build_alpine_rootfs(){
   local r="$1"
   local tmp="$(mktemp -d)"
   shift
-  (wget -O - http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/"$CONFIG_ALPINE_ROOTFS_ARCH"/alpine-minirootfs-3.11.2-x86_64.tar.gz | tar -xzC "$tmp") || return 1
-  local builtinfiles="$(find "$tmp" -type f)"
+  (wget -O - http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/"$CONFIG_ALPINE_ROOTFS_ARCH"/alpine-minirootfs-3.11.3-"$CONFIG_ALPINE_ROOTFS_ARCH".tar.gz | tar -xzC "$tmp") || return 1
   RETRY apk add --no-cache --root "$tmp" "$@" || return 1
-  rm -fr $builtinfiles
-  cp -r "$tmp"/* "$r"/
+  (cd "$tmp" &&
+  rm -fr ./lib/apk ./lib/firmware ./lib/ld-musl-*.so.* ./lib/libc.musl-*.so.* ./lib/libcrypto.so.* ./lib/libssl.so.* ./lib/libz.so.* ./lib/mdev ./usr/lib/engines-* ./usr/lib/libcrypto.so.* ./usr/lib/libssl.so.* ./usr/lib/libtls-standalone.so.*
+  )
+  mkdir -p "$r"/lib
+  mkdir -p "$r"/usr/lib
+  cp -r "$tmp"/lib/* "$r"/lib/
+  cp -r "$tmp"/usr/lib/* "$r"/usr/lib/
   rm -fr "$tmp"
   true
 }
