@@ -424,6 +424,16 @@ rm -fr "./capturetheflag/mods/ctf/ctf_map/ctf_map_core/maps/$m"
 done
 sed -i 's|default:sword_stone|default:sword_steel|' ./capturetheflag/mods/ctf/ctf_map/ctf_map_core/maps/*/map.conf
 sed -i 's|default:pick_stone|default:pick_steel|' ./capturetheflag/mods/ctf/ctf_map/ctf_map_core/maps/*/map.conf
+
+cat << 'EOF' >> ./capturetheflag/mods/ctf/ctf_map/ctf_map_core/init.lua
+do
+  local old_is_protected = minetest.is_protected
+  function minetest.is_protected(pos, name)
+    if string.sub(minetest.get_node(pos).name, 1, 8) == "ctf_map:" then return true end
+    return old_is_protected(pos, name)
+  end
+end
+EOF
 }
 job_capturetheflag(){
   make_capturetheflag &&
