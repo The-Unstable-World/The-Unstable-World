@@ -271,6 +271,14 @@ bundle_minetest_client_gnulinux_appimage(){
   ../linuxdeploy.AppImage --appdir minetest.AppDir &&
   ../appimagetool.AppImage minetest.AppDir minetest.AppImage)
 }
+bundle_minetest_client_gnulinux_appimage_alpine(){
+  bundle_minetest_client_gnulinux_appdir_nolibs &&
+  build_alpine_rootfs ./minetest/minetest.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit irrlicht zlib libpng jpeg libogg libvorbis openal-soft freetype &&
+  ln -s usr/bin/minetest usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/net.minetest.minetest.desktop ./minetest/minetest.AppDir &&
+  echo -e '#!/bin/sh\nLD_LIBRARY_PATH="$(dirname "$0")/lib:$(dirname "$0")/usr/lib" exec "$(dirname "$0")"/usr/bin/minetest "$@"' > ./minetest/minetest.AppDir/AppRun &&
+  chmod +x ./minetest/minetest.AppDir/AppRun &&
+  ./appimagetool.AppImage ./minetest/minetest.AppDir ./minetest/minetest.AppImage
+}
 CONFIG_ALPINE_ROOTFS_ARCH=x86_64
 build_alpine_rootfs(){
   local r="$1"
@@ -313,6 +321,14 @@ bundle_minetest_server_gnulinux_appimage(){
   (cd ./minetest &&
   ../linuxdeploy.AppImage --appdir minetestserver.AppDir &&
   ../appimagetool.AppImage minetestserver.AppDir minetestserver.AppImage)
+}
+bundle_minetest_server_gnulinux_appimage_alpine(){
+  bundle_minetest_server_gnulinux_appdir_nolibs &&
+  build_alpine_rootfs ./minetest/minetestserver.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit zlib &&
+  ln -s usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/minetestserver.desktop ./minetest/minetestserver.AppDir &&
+  echo -e '#!/bin/sh\nLD_LIBRARY_PATH="$(dirname "$0")/lib:$(dirname "$0")/usr/lib" exec "$(dirname "$0")"/usr/bin/minetestserver "$@"' > ./minetest/minetestserver.AppDir/AppRun &&
+  chmod +x ./minetest/minetestserver.AppDir/AppRun &&
+  ./appimagetool.AppImage ./minetest/minetestserver.AppDir ./minetest/minetestserver.AppImage
 }
 job_mods(){
   CONFIG_MODS="$(mods_mod)"

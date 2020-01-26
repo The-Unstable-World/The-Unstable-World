@@ -4,73 +4,73 @@ jobs:
     - name: "Mods"
       os: linux
       dist: bionic
-      install:
-        - . ./lib.sh
-      script:
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/mods
-        - pushd /tmp/WORKSPACE/DEPLOY/mods
-        - job_mods
-        - popd
+      install: |
+        . ./lib.sh
+      script: |
+        mkdir -p /tmp/WORKSPACE/DEPLOY/mods &&
+        pushd /tmp/WORKSPACE/DEPLOY/mods &&
+        job_mods &&
+        popd
     - name: "Games"
       os: linux
       dist: bionic
-      install:
-        - . ./lib.sh
-      script:
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/games
-        - pushd /tmp/WORKSPACE/DEPLOY/games
-        - job_capturetheflag
-        - popd
+      install: |
+        . ./lib.sh
+      script: |
+        mkdir -p /tmp/WORKSPACE/DEPLOY/games &&
+        pushd /tmp/WORKSPACE/DEPLOY/games &&
+        job_capturetheflag &&
+        popd
     - name: "MacOSX Client"
       os: osx
       osx_image: xcode8
-      install:
-        - . ./lib.sh
-        - RETRY brew update
-        - install_osx_coreutils_and_set_PATH
-        - install_minetest_osx_builddeps
-      script:
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - build_minetest_client_osx
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
-        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip
-        - popd
+      install: |
+        . ./lib.sh &&
+        RETRY brew update &&
+        install_osx_coreutils_and_set_PATH &&
+        install_minetest_osx_builddeps
+      script: |
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        get_minetest &&
+        build_minetest_client_osx &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx &&
+        cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip &&
+        popd
     - name: "MacOSX Client (Cheat)" # These clients are used to test anti-cheating mods
       os: osx
       osx_image: xcode8
-      install:
-        - . ./lib.sh
-        - RETRY brew update
-        - install_osx_coreutils_and_set_PATH
-        - install_minetest_osx_builddeps
-      script:
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - apply_cheat_patch
-        - (cd minetest && git add . && git diff --cached)
-        - build_minetest_client_osx
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/cheat_client/macosx
-        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/cheat_client/macosx/minetest.zip
-        - popd
+      install: |
+        . ./lib.sh &&
+        RETRY brew update &&
+        install_osx_coreutils_and_set_PATH &&
+        install_minetest_osx_builddeps
+      script: |
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        get_minetest &&
+        apply_cheat_patch &&
+        (cd minetest && git add . && git diff --cached) &&
+        build_minetest_client_osx &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/cheat_client/macosx &&
+        cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/cheat_client/macosx/minetest.zip &&
+        popd
     - name: "MacOSX Client (MacOSX10.13+XCode9.4.1)"
       os: osx
       osx_image: xcode9.4
-      install:
-        - . ./lib.sh
-        - RETRY brew update
-        - install_osx_coreutils_and_set_PATH
-        - install_minetest_osx_builddeps
-      script:
-        - mkdir -p /tmp/WORKSPACE
-        - pushd /tmp/WORKSPACE
-        - get_minetest
-        - build_minetest_client_osx
-        - mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx
-        - cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest_highsierra.zip
-        - popd
+      install: |
+        . ./lib.sh &&
+        RETRY brew update &&
+        install_osx_coreutils_and_set_PATH &&
+        install_minetest_osx_builddeps
+      script: |
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        get_minetest &&
+        build_minetest_client_osx &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx &&
+        cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest_highsierra.zip &&
+        popd
     - name: "GNU/Linux AMD64 Client"
       os: linux
       dist: bionic
@@ -146,12 +146,7 @@ jobs:
           get_minetest &&
           build_minetest_client_gnulinux &&
           build_appimage_install_builddeps_alpine_nosudo &&
-          bundle_minetest_client_gnulinux_appdir_nolibs &&
-          build_alpine_rootfs ./minetest/minetest.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit irrlicht zlib libpng jpeg libogg libvorbis openal-soft freetype &&
-          ln -s usr/bin/minetest usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/net.minetest.minetest.desktop ./minetest/minetest.AppDir &&
-          echo -e '#!/bin/sh\nLD_LIBRARY_PATH="$(dirname "$0")/lib:$(dirname "$0")/usr/lib" exec "$(dirname "$0")"/usr/bin/minetest "$@"' > ./minetest/minetest.AppDir/AppRun &&
-          chmod +x ./minetest/minetest.AppDir/AppRun &&
-          ./appimagetool.AppImage ./minetest/minetest.AppDir ./minetest/minetest.AppImage &&
+          bundle_minetest_client_gnulinux_appimage_alpine &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
           cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
         EOF
@@ -171,12 +166,7 @@ jobs:
           get_minetest &&
           build_minetest_server_gnulinux &&
           build_appimage_install_builddeps_alpine_nosudo &&
-          bundle_minetest_server_gnulinux_appdir_nolibs &&
-          build_alpine_rootfs ./minetest/minetestserver.AppDir sqlite-libs leveldb ncurses curl gmp libstdc++ libgcc luajit zlib &&
-          ln -s usr/share/icons/hicolor/128x128/apps/minetest.png usr/share/applications/minetestserver.desktop ./minetest/minetestserver.AppDir &&
-          echo -e '#!/bin/sh\nLD_LIBRARY_PATH="$(dirname "$0")/lib:$(dirname "$0")/usr/lib" exec "$(dirname "$0")"/usr/bin/minetestserver "$@"' > ./minetest/minetestserver.AppDir/AppRun &&
-          chmod +x ./minetest/minetestserver.AppDir/AppRun &&
-          ./appimagetool.AppImage ./minetest/minetestserver.AppDir ./minetest/minetestserver.AppImage &&
+          bundle_minetest_server_gnulinux_appimage_alpine &&
           mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
         EOF

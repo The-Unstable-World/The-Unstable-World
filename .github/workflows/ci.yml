@@ -1,0 +1,119 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron:  '0 */1 * * *'
+
+jobs:
+  mods:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Init
+      run: |
+        . ./lib.sh
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE/DEPLOY/mods &&
+        pushd /tmp/WORKSPACE/DEPLOY/mods &&
+        job_mods &&
+        popd
+    - name: Publish
+      env:
+        GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
+        GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
+        GIT_REPO: git@github.com:The-Unstable-World/The-Unstable-World.git
+        GIT_SITE: github.com
+      run: |
+        mkdir -p ~/.ssh &&
+        echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
+        echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
+        ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
+        chmod 600 ~/.ssh/* &&
+        git clone --depth 1 "$GIT_REPO" publish_repo &&
+        git config --global user.email ci@ci &&
+        git config --global user.name ci &&
+        cd publish_repo &&
+        rm -fr dist &&
+        mv ../dist ./ &&
+        git add . &&
+        git commit --allow-empty -m "$(date -Iseconds)" &&
+        git push
+  games:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Init
+      run: |
+        . ./lib.sh
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE/DEPLOY/games &&
+        pushd /tmp/WORKSPACE/DEPLOY/games &&
+        job_capturetheflag &&
+        popd
+    - name: Publish
+      env:
+        GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
+        GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
+        GIT_REPO: git@github.com:The-Unstable-World/The-Unstable-World.git
+        GIT_SITE: github.com
+      run: |
+        mkdir -p ~/.ssh &&
+        echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
+        echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
+        ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
+        chmod 600 ~/.ssh/* &&
+        git clone --depth 1 "$GIT_REPO" publish_repo &&
+        git config --global user.email ci@ci &&
+        git config --global user.name ci &&
+        cd publish_repo &&
+        rm -fr dist &&
+        mv ../dist ./ &&
+        git add . &&
+        git commit --allow-empty -m "$(date -Iseconds)" &&
+        git push
+  amd64-alpine-server:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_server_gnulinux &&
+          get_appimage_and_linuxdeploy &&
+          bundle_minetest_server_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
+        EOF
+    - name: Publish
+      env:
+        GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
+        GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
+        GIT_REPO: git@github.com:The-Unstable-World/The-Unstable-World.git
+        GIT_SITE: github.com
+      run: |
+        mkdir -p ~/.ssh &&
+        echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
+        echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
+        ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
+        chmod 600 ~/.ssh/* &&
+        git clone --depth 1 "$GIT_REPO" publish_repo &&
+        git config --global user.email ci@ci &&
+        git config --global user.name ci &&
+        cd publish_repo &&
+        rm -fr dist &&
+        mv ../dist ./ &&
+        git add . &&
+        git commit --allow-empty -m "$(date -Iseconds)" &&
+        git push
