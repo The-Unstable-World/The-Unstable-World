@@ -290,7 +290,7 @@ after_success:
       cd /tmp/WORKSPACE/deploy_repo &&
       cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
       git add . &&
-      git commit --allow-empty -m "deploy $(date -Iseconds)" &&
+      git commit --allow-empty -m "[travis ci]deploy $(date -Iseconds)" &&
       git push
       )
     }

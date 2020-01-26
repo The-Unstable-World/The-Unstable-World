@@ -40,7 +40,7 @@ jobs:
           cd /tmp/WORKSPACE/deploy_repo &&
           cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
           git add . &&
-          git commit --allow-empty -m "$(date -Iseconds)" &&
+          git commit --allow-empty -m "[github actions]deploy $(date -Iseconds)" &&
           git push
           )
         }
@@ -80,7 +80,7 @@ jobs:
           cd /tmp/WORKSPACE/deploy_repo &&
           cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
           git add . &&
-          git commit --allow-empty -m "$(date -Iseconds)" &&
+          git commit --allow-empty -m "[github actions]deploy $(date -Iseconds)" &&
           git push
           )
         }
@@ -130,7 +130,7 @@ jobs:
           cd /tmp/WORKSPACE/deploy_repo &&
           cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
           git add . &&
-          git commit --allow-empty -m "$(date -Iseconds)" &&
+          git commit --allow-empty -m "[github actions]deploy $(date -Iseconds)" &&
           git push
           )
         }
