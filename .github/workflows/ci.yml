@@ -11,11 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Init
-      run: |
-        . ./lib.sh
     - name: Build
       run: |
+        . ./lib.sh
         mkdir -p /tmp/WORKSPACE/DEPLOY/mods &&
         pushd /tmp/WORKSPACE/DEPLOY/mods &&
         job_mods &&
@@ -24,32 +22,36 @@ jobs:
       env:
         GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
         GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
-        GIT_REPO: git@github.com:The-Unstable-World/The-Unstable-World.git
+        GIT_REPO: git@github.com:The-Unstable-World/binary.git
         GIT_SITE: github.com
       run: |
-        mkdir -p ~/.ssh &&
-        echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
-        echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
-        ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
-        chmod 600 ~/.ssh/* &&
-        git clone --depth 1 "$GIT_REPO" publish_repo &&
-        git config --global user.email ci@ci &&
-        git config --global user.name ci &&
-        cd publish_repo &&
-        rm -fr dist &&
-        mv ../dist ./ &&
-        git add . &&
-        git commit --allow-empty -m "$(date -Iseconds)" &&
-        git push
+        . ./lib.sh
+        do_publish(){
+          mkdir -p ~/.ssh &&
+          echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
+          echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
+          ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
+          chmod 600 ~/.ssh/* &&
+          rm -fr /tmp/WORKSPACE/deploy_repo &&
+          git clone --depth 1 "$GIT_REPO" /tmp/WORKSPACE/deploy_repo &&
+          git config --global user.email tsao-chi@the-lingo.org &&
+          git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
+          cd /tmp/WORKSPACE/deploy_repo &&
+          cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
+          git add . &&
+          git commit --allow-empty -m "$(date -Iseconds)" &&
+          git push
+        }
+        if [ -n "$GIT_ID_RSA" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
+          RETRY do_publish
+        fi
   games:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Init
-      run: |
-        . ./lib.sh
     - name: Build
       run: |
+        . ./lib.sh
         mkdir -p /tmp/WORKSPACE/DEPLOY/games &&
         pushd /tmp/WORKSPACE/DEPLOY/games &&
         job_capturetheflag &&
@@ -58,23 +60,29 @@ jobs:
       env:
         GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
         GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
-        GIT_REPO: git@github.com:The-Unstable-World/The-Unstable-World.git
+        GIT_REPO: git@github.com:The-Unstable-World/binary.git
         GIT_SITE: github.com
       run: |
-        mkdir -p ~/.ssh &&
-        echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
-        echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
-        ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
-        chmod 600 ~/.ssh/* &&
-        git clone --depth 1 "$GIT_REPO" publish_repo &&
-        git config --global user.email ci@ci &&
-        git config --global user.name ci &&
-        cd publish_repo &&
-        rm -fr dist &&
-        mv ../dist ./ &&
-        git add . &&
-        git commit --allow-empty -m "$(date -Iseconds)" &&
-        git push
+        . ./lib.sh
+        do_publish(){
+          mkdir -p ~/.ssh &&
+          echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
+          echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
+          ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
+          chmod 600 ~/.ssh/* &&
+          rm -fr /tmp/WORKSPACE/deploy_repo &&
+          git clone --depth 1 "$GIT_REPO" /tmp/WORKSPACE/deploy_repo &&
+          git config --global user.email tsao-chi@the-lingo.org &&
+          git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
+          cd /tmp/WORKSPACE/deploy_repo &&
+          cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
+          git add . &&
+          git commit --allow-empty -m "$(date -Iseconds)" &&
+          git push
+        }
+        if [ -n "$GIT_ID_RSA" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
+          RETRY do_publish
+        fi
   amd64-alpine-server:
     runs-on: ubuntu-latest
     steps:
@@ -100,20 +108,26 @@ jobs:
       env:
         GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
         GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
-        GIT_REPO: git@github.com:The-Unstable-World/The-Unstable-World.git
+        GIT_REPO: git@github.com:The-Unstable-World/binary.git
         GIT_SITE: github.com
       run: |
-        mkdir -p ~/.ssh &&
-        echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
-        echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
-        ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
-        chmod 600 ~/.ssh/* &&
-        git clone --depth 1 "$GIT_REPO" publish_repo &&
-        git config --global user.email ci@ci &&
-        git config --global user.name ci &&
-        cd publish_repo &&
-        rm -fr dist &&
-        mv ../dist ./ &&
-        git add . &&
-        git commit --allow-empty -m "$(date -Iseconds)" &&
-        git push
+        . ./lib.sh
+        do_publish(){
+          mkdir -p ~/.ssh &&
+          echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
+          echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
+          ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
+          chmod 600 ~/.ssh/* &&
+          rm -fr /tmp/WORKSPACE/deploy_repo &&
+          git clone --depth 1 "$GIT_REPO" /tmp/WORKSPACE/deploy_repo &&
+          git config --global user.email tsao-chi@the-lingo.org &&
+          git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
+          cd /tmp/WORKSPACE/deploy_repo &&
+          cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
+          git add . &&
+          git commit --allow-empty -m "$(date -Iseconds)" &&
+          git push
+        }
+        if [ -n "$GIT_ID_RSA" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
+          RETRY do_publish
+        fi
