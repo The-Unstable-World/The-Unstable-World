@@ -278,6 +278,7 @@ after_success:
   - |
     . ./lib.sh
     do_publish(){
+      (
       cd /tmp/WORKSPACE &&
       git config --global user.email tsao-chi@the-lingo.org &&
       git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
@@ -291,6 +292,7 @@ after_success:
       git add . &&
       git commit --allow-empty -m "deploy $(date -Iseconds)" &&
       git push
+      )
     }
     if [ -n "${PRIVATE_KEY_BASE64}" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
       RETRY do_publish
