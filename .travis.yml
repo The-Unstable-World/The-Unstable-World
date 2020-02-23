@@ -23,7 +23,7 @@ jobs:
         popd
     - name: "MacOSX Client"
       os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
       install: |
         . ./lib.sh &&
         RETRY brew update &&
@@ -39,7 +39,7 @@ jobs:
         popd
     - name: "MacOSX Client (Cheat)" # These clients are used to test anti-cheating mods
       os: osx
-      osx_image: xcode8
+      osx_image: xcode8.3
       install: |
         . ./lib.sh &&
         RETRY brew update &&
