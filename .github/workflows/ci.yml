@@ -110,7 +110,6 @@ jobs:
         EOF
     - name: Publish
       env:
-        GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
         GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
         GIT_REPO: git@github.com:The-Unstable-World/binary.git
         GIT_SITE: github.com
@@ -119,7 +118,6 @@ jobs:
         do_publish(){
           (
           mkdir -p ~/.ssh &&
-          echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
           echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
           ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
           chmod 600 ~/.ssh/* &&
