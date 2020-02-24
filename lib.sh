@@ -349,7 +349,7 @@ make_capturetheflag(){
   cd capturetheflag &&
   git clone --depth 1 https://github.com/minetest/minetest_game.git MTG &&
   git clone --recursive https://github.com/MT-CTF/capturetheflag.git CTF &&
-  rm -fr MTG/mods/give_initial_stuff CTF/mods/mtg &&
+  rm -fr MTG/mods/give_initial_stuff CTF/mods/mtg CTF/mods/other/crafting CTF/mods/ctf/ctf_crafting &&
   mv MTG/mods CTF/menu CTF/game.conf CTF/minetest.conf CTF/README.md ./ &&
   mv CTF/mods/* ./mods/ &&
     (mkdir mods/custom &&
