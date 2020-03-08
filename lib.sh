@@ -148,8 +148,8 @@ install_minetest_archlinux_builddeps_nosudo(){
 }
 install_minetest_centos7_builddeps_nosudo(){
   RETRY yum install -y centos-release-scl-rh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &&
-  RETRY yum install -y git file wget devtoolset-8-make automake devtoolset-8-gcc devtoolset-8-gcc-c++ kernel-devel llvm-toolset-7-cmake libcurl-devel openal-soft-devel libvorbis-devel libXxf86vm-devel libogg-devel freetype-devel mesa-libGL-devel zlib-devel jsoncpp-devel irrlicht-devel bzip2-libs gmp-devel sqlite-devel luajit-devel leveldb-devel ncurses-devel doxygen spatialindex-devel bzip2-devel &&
-  ln -s /opt/rh/devtoolset-8/root/usr/bin/* /opt/rh/llvm-toolset-7/root/usr/bin/* /usr/local/bin
+  RETRY yum install -y git file wget devtoolset-9-make automake devtoolset-9-gcc devtoolset-9-gcc-c++ kernel-devel llvm-toolset-7-cmake libcurl-devel openal-soft-devel libvorbis-devel libXxf86vm-devel libogg-devel freetype-devel mesa-libGL-devel zlib-devel jsoncpp-devel irrlicht-devel bzip2-libs gmp-devel sqlite-devel luajit-devel leveldb-devel ncurses-devel doxygen spatialindex-devel bzip2-devel &&
+  ln -s /opt/rh/devtoolset-9/root/usr/bin/* /opt/rh/llvm-toolset-7/root/usr/bin/* /usr/local/bin
 }
 install_minetest_alpine_builddeps_nosudo(){
   RETRY apk add wget git build-base irrlicht-dev cmake bzip2-dev libpng-dev jpeg-dev libxxf86vm-dev mesa-dev sqlite-dev libogg-dev libvorbis-dev openal-soft-dev curl-dev freetype-dev zlib-dev gmp-dev jsoncpp-dev luajit-dev
