@@ -3,7 +3,7 @@
 
 # The Unstable World
 
-You can download development builds of Minetest Client (Android/Windows/MacOSX/Linux) from https://github.com/The-Unstable-World/binary
+You can download development builds of Minetest Client (Android/Windows/MacOSX/Linux) from https://github.com/The-Unstable-World/The-Unstable-World/actions
 
 ## Address
 
