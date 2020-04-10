@@ -65,6 +65,162 @@ jobs:
       with:
         name: amd64-alpine-server
         path: /tmp/WORKSPACE/DEPLOY
+  amd64-linux-server:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_server_gnulinux &&
+          get_appimage_and_linuxdeploy &&
+          bundle_minetest_server_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64
+        EOF
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-linux-server
+        path: /tmp/WORKSPACE/DEPLOY
+  amd64-archlinux-server:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          install_minetest_archlinux_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_server_gnulinux &&
+          get_appimage_and_linuxdeploy &&
+          bundle_minetest_server_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64 &&
+          cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_archlinux.AppImage
+        EOF
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-archlinux-server
+        path: /tmp/WORKSPACE/DEPLOY
+  amd64-alpine-client:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" alpine sh << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          CONFIG_ALPINE_ROOTFS_ARCH=x86_64
+          install_minetest_alpine_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_client_gnulinux &&
+          build_appimage_install_builddeps_alpine_nosudo &&
+          bundle_minetest_client_gnulinux_appimage_alpine &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_alpine.AppImage
+        EOF
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-alpine-client
+        path: /tmp/WORKSPACE/DEPLOY
+  amd64-linux-client:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_client_gnulinux &&
+          get_appimage_and_linuxdeploy &&
+          bundle_minetest_client_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64
+        EOF
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-linux-client
+        path: /tmp/WORKSPACE/DEPLOY
+  amd64-archlinux-client:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" archlinux/base bash << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          install_minetest_archlinux_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          build_minetest_client_gnulinux &&
+          get_appimage_and_linuxdeploy &&
+          bundle_minetest_client_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/client/gnulinux/amd64/minetest_archlinux.AppImage
+        EOF
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-archlinux-client
+        path: /tmp/WORKSPACE/DEPLOY
+  amd64-linux-client-cheat:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        docker run -i --rm --workdir "$PWD" -v "$PWD:$PWD" -v "/tmp/WORKSPACE:/tmp/WORKSPACE" centos:7 bash << 'EOF'
+          export APPIMAGE_EXTRACT_AND_RUN=1
+          . ./lib.sh
+          CONFIG_APPIMAGE_TOOLS_ARCH=x86_64
+          RETRY yum update -y &&
+          install_minetest_centos7_builddeps_nosudo &&
+          cd /tmp/WORKSPACE &&
+          get_minetest &&
+          apply_cheat_patch &&
+          (cd minetest && git add . && git diff --cached) &&
+          build_minetest_client_gnulinux &&
+          get_appimage_and_linuxdeploy &&
+          bundle_minetest_client_gnulinux_appimage &&
+          mkdir -p /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64 &&
+          cp ./minetest/minetest.AppImage /tmp/WORKSPACE/DEPLOY/cheat_client/gnulinux/amd64
+        EOF
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-linux-client-cheat
+        path: /tmp/WORKSPACE/DEPLOY
   mac-client:
     runs-on: macos-latest
     steps:
