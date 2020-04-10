@@ -65,3 +65,53 @@ jobs:
       with:
         name: amd64-alpine-server
         path: /tmp/WORKSPACE/DEPLOY
+  mac-client:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install
+      run: |
+        . ./lib.sh &&
+        RETRY brew update &&
+        install_osx_coreutils_and_set_PATH &&
+        install_minetest_osx_builddeps
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        get_minetest &&
+        build_minetest_client_osx &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/client/macosx &&
+        cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/client/macosx/minetest.zip &&
+        popd
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: mac-client
+        path: /tmp/WORKSPACE/DEPLOY
+  mac-client-cheat:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install
+      run: |
+        . ./lib.sh &&
+        RETRY brew update &&
+        install_osx_coreutils_and_set_PATH &&
+        install_minetest_osx_builddeps
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        get_minetest &&
+        apply_cheat_patch &&
+        (cd minetest && git add . && git diff --cached) &&
+        build_minetest_client_osx &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/cheat_client/macosx &&
+        cp -rv ./minetest/*.zip /tmp/WORKSPACE/DEPLOY/cheat_client/macosx/minetest.zip &&
+        popd
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: mac-client-cheat
+        path: /tmp/WORKSPACE/DEPLOY
