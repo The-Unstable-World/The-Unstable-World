@@ -69,14 +69,12 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Install
+    - name: Build
       run: |
         . ./lib.sh &&
         RETRY brew update &&
         install_osx_coreutils_and_set_PATH &&
-        install_minetest_osx_builddeps
-    - name: Build
-      run: |
+        install_minetest_osx_builddeps &&
         mkdir -p /tmp/WORKSPACE &&
         pushd /tmp/WORKSPACE &&
         get_minetest &&
@@ -93,14 +91,12 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Install
+    - name: Build
       run: |
         . ./lib.sh &&
         RETRY brew update &&
         install_osx_coreutils_and_set_PATH &&
-        install_minetest_osx_builddeps
-    - name: Build
-      run: |
+        install_minetest_osx_builddeps &&
         mkdir -p /tmp/WORKSPACE &&
         pushd /tmp/WORKSPACE &&
         get_minetest &&
