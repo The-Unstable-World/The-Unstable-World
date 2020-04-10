@@ -458,3 +458,33 @@ job_capturetheflag(){
   tar -czvf ../capturetheflag.tgz .) &&
   rm -fr capturetheflag
 }
+job_android_install(){
+  export ANDROID_HOME="$HOME/android-sdk-linux"
+  export PATH="$PATH:$ANDROID_HOME/tools/bin"
+  export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
+  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+  export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
+  local ndk_version=r16b
+  RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
+  unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux &&
+  rm ~/sdk-tools-linux.zip &&
+  RETRY wget --continue --quiet -O "$HOME/android-ndk-${ndk_version}.zip" "https://dl.google.com/android/repository/android-ndk-${ndk_version}-linux-x86_64.zip" &&
+  unzip -q "$HOME/android-ndk-${ndk_version}.zip" -d ~ &&
+  rm "$HOME/android-ndk-${ndk_version}.zip" &&
+  echo y | sdkmanager "build-tools;29.0.2" &&
+  echo y | sdkmanager "platforms;android-29"
+}
+job_android_build(){
+  if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass;fi
+  get_minetest &&
+  rm -fr ./minetest/games/minetest_game/.git &&
+  echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties &&
+  echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties &&
+  cd ./minetest/build/android &&
+  make release -j4 &&
+  mkdir -p /tmp/WORKSPACE/DEPLOY/client/android &&
+  zipalign -p 4 ./build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk &&
+  mkdir -p ~/apk-signing-key &&
+  apksigner sign --ks ~/apk-signing-key/key.keystore --ks-key-alias key --ks-pass pass:storepass /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk &&
+  cd ../../..
+}
