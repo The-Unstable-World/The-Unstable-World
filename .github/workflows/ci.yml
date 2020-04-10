@@ -19,34 +19,10 @@ jobs:
         job_mods &&
         popd
     - name: Publish
-      env:
-        GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
-        GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
-        GIT_REPO: git@github.com:The-Unstable-World/binary.git
-        GIT_SITE: github.com
-      run: |
-        . ./lib.sh
-        do_publish(){
-          (
-          mkdir -p ~/.ssh &&
-          echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
-          echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
-          ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
-          chmod 600 ~/.ssh/* &&
-          rm -fr /tmp/WORKSPACE/deploy_repo &&
-          git clone --depth 1 "$GIT_REPO" /tmp/WORKSPACE/deploy_repo &&
-          git config --global user.email tsao-chi@the-lingo.org &&
-          git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
-          cd /tmp/WORKSPACE/deploy_repo &&
-          cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
-          git add . &&
-          git commit --allow-empty -m "[github actions]deploy $(date -Iseconds)" &&
-          git push
-          )
-        }
-        if [ -n "$GIT_ID_RSA" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
-          RETRY do_publish
-        fi
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: mods
+        path: /tmp/WORKSPACE/DEPLOY
   games:
     runs-on: ubuntu-latest
     steps:
@@ -59,34 +35,10 @@ jobs:
         job_capturetheflag &&
         popd
     - name: Publish
-      env:
-        GIT_ID_RSA_PUB: ${{ secrets.GIT_ID_RSA_PUB }}
-        GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
-        GIT_REPO: git@github.com:The-Unstable-World/binary.git
-        GIT_SITE: github.com
-      run: |
-        . ./lib.sh
-        do_publish(){
-          (
-          mkdir -p ~/.ssh &&
-          echo "$GIT_ID_RSA_PUB" > ~/.ssh/id_rsa.pub &&
-          echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
-          ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
-          chmod 600 ~/.ssh/* &&
-          rm -fr /tmp/WORKSPACE/deploy_repo &&
-          git clone --depth 1 "$GIT_REPO" /tmp/WORKSPACE/deploy_repo &&
-          git config --global user.email tsao-chi@the-lingo.org &&
-          git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
-          cd /tmp/WORKSPACE/deploy_repo &&
-          cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
-          git add . &&
-          git commit --allow-empty -m "[github actions]deploy $(date -Iseconds)" &&
-          git push
-          )
-        }
-        if [ -n "$GIT_ID_RSA" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
-          RETRY do_publish
-        fi
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: games
+        path: /tmp/WORKSPACE/DEPLOY
   amd64-alpine-server:
     runs-on: ubuntu-latest
     steps:
@@ -109,29 +61,7 @@ jobs:
           cp ./minetest/minetestserver.AppImage /tmp/WORKSPACE/DEPLOY/server/gnulinux/amd64/minetestserver_alpine.AppImage
         EOF
     - name: Publish
-      env:
-        GIT_ID_RSA: ${{ secrets.GIT_ID_RSA }}
-        GIT_REPO: git@github.com:The-Unstable-World/binary.git
-        GIT_SITE: github.com
-      run: |
-        . ./lib.sh
-        do_publish(){
-          (
-          mkdir -p ~/.ssh &&
-          echo "$GIT_ID_RSA" > ~/.ssh/id_rsa &&
-          ssh-keyscan -H -t rsa "$GIT_SITE" > ~/.ssh/known_hosts &&
-          chmod 600 ~/.ssh/* &&
-          rm -fr /tmp/WORKSPACE/deploy_repo &&
-          git clone --depth 1 "$GIT_REPO" /tmp/WORKSPACE/deploy_repo &&
-          git config --global user.email tsao-chi@the-lingo.org &&
-          git config --global user.name 'ㄗㄠˋ ㄑㄧˊ' &&
-          cd /tmp/WORKSPACE/deploy_repo &&
-          cp -rv /tmp/WORKSPACE/DEPLOY/* ./ &&
-          git add . &&
-          git commit --allow-empty -m "[github actions]deploy $(date -Iseconds)" &&
-          git push
-          )
-        }
-        if [ -n "$GIT_ID_RSA" ] && [ -d /tmp/WORKSPACE/DEPLOY ] ;then
-          RETRY do_publish
-        fi
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-alpine-server
+        path: /tmp/WORKSPACE/DEPLOY
