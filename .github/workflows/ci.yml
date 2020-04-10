@@ -267,3 +267,43 @@ jobs:
       with:
         name: mac-client-cheat
         path: /tmp/WORKSPACE/DEPLOY
+  amd64-windows-client:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        CONFIG_WIN_ARCH=x86_64
+        . ./lib.sh &&
+        RETRY sudo apt-get update &&
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        install_minetest_mingw_builddeps__and__build__ubuntu1604 &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/amd64 &&
+        cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64 &&
+        popd
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: amd64-windows-client
+        path: /tmp/WORKSPACE/DEPLOY
+  i686-windows-client:
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: |
+        CONFIG_WIN_ARCH=i686
+        . ./lib.sh &&
+        RETRY sudo apt-get update &&
+        mkdir -p /tmp/WORKSPACE &&
+        pushd /tmp/WORKSPACE &&
+        install_minetest_mingw_builddeps__and__build__ubuntu1604 &&
+        mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/i686 &&
+        cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/i686 &&
+        popd
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: i686-windows-client
+        path: /tmp/WORKSPACE/DEPLOY
