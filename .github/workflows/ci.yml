@@ -268,7 +268,7 @@ jobs:
         name: mac-client-cheat
         path: /tmp/WORKSPACE/DEPLOY
   amd64-windows-client:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
     - name: Build
@@ -278,7 +278,7 @@ jobs:
         RETRY sudo apt-get update &&
         mkdir -p /tmp/WORKSPACE &&
         pushd /tmp/WORKSPACE &&
-        install_minetest_mingw_builddeps__and__build__ubuntu1604 &&
+        install_minetest_mingw_builddeps__and__build__ubuntu1804 &&
         mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/amd64 &&
         cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/amd64 &&
         popd
@@ -288,7 +288,7 @@ jobs:
         name: amd64-windows-client
         path: /tmp/WORKSPACE/DEPLOY
   i686-windows-client:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v1
     - name: Build
@@ -298,7 +298,7 @@ jobs:
         RETRY sudo apt-get update &&
         mkdir -p /tmp/WORKSPACE &&
         pushd /tmp/WORKSPACE &&
-        install_minetest_mingw_builddeps__and__build__ubuntu1604 &&
+        install_minetest_mingw_builddeps__and__build__ubuntu1804 &&
         mkdir -p /tmp/WORKSPACE/DEPLOY/client/windows/i686 &&
         cp ./minetest/minetest.zip /tmp/WORKSPACE/DEPLOY/client/windows/i686 &&
         popd
