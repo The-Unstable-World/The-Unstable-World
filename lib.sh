@@ -462,7 +462,6 @@ job_android_install(){
   export ANDROID_HOME="$HOME/android-sdk-linux"
   export PATH="$PATH:$ANDROID_HOME/tools/bin"
   export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
-  export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
   local ndk_version=r21b
   RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
