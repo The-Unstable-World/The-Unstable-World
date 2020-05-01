@@ -458,17 +458,17 @@ job_capturetheflag(){
   rm -fr capturetheflag
 }
 job_android_install(){
-  local ndk_version=r21a
+  #local ndk_version=r21b
   export ANDROID_HOME="$HOME/android-sdk-linux"
   export PATH="$PATH:$ANDROID_HOME/tools/bin"
-  export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
+  #export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
   export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
   RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
   unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux &&
   rm ~/sdk-tools-linux.zip &&
-  RETRY wget --continue --quiet -O "$HOME/android-ndk-${ndk_version}.zip" "https://dl.google.com/android/repository/android-ndk-${ndk_version}-linux-x86_64.zip" &&
-  unzip -q "$HOME/android-ndk-${ndk_version}.zip" -d ~ &&
-  rm "$HOME/android-ndk-${ndk_version}.zip" &&
+  #RETRY wget --continue --quiet -O "$HOME/android-ndk-${ndk_version}.zip" "https://dl.google.com/android/repository/android-ndk-${ndk_version}-linux-x86_64.zip" &&
+  #unzip -q "$HOME/android-ndk-${ndk_version}.zip" -d ~ &&
+  #rm "$HOME/android-ndk-${ndk_version}.zip" &&
   echo y | sdkmanager "build-tools;29.0.2" &&
   echo y | sdkmanager "platforms;android-29"
 }
@@ -476,7 +476,7 @@ job_android_build(){
   #if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias Minetest -storepass storepass;fi
   get_minetest &&
   rm -fr ./minetest/games/minetest_game/.git &&
-  echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties &&
+  #echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties &&
   echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties &&
   #echo "key.store=$HOME/apk-signing-key/key.keystore" > ./minetest/build/android/ant.properties &&
   #echo "key.alias=Minetest" > ./minetest/build/android/ant.properties &&
