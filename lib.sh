@@ -464,7 +464,7 @@ job_android_install(){
   export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
   export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
   export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
-  local ndk_version=r16b
+  local ndk_version=r21b
   RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
   unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux &&
   rm ~/sdk-tools-linux.zip &&
@@ -475,16 +475,16 @@ job_android_install(){
   echo y | sdkmanager "platforms;android-29"
 }
 job_android_build(){
-  if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias key -storepass storepass;fi
+  if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias Minetest -storepass storepass;fi
   get_minetest &&
   rm -fr ./minetest/games/minetest_game/.git &&
   echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties &&
   echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties &&
+  echo "key.store=$HOME/apk-signing-key/key.keystore" > ./minetest/build/android/ant.properties &&
+  echo "key.alias=Minetest" > ./minetest/build/android/ant.properties &&
   cd ./minetest/build/android &&
-  make release -j4 &&
+  ./gradlew assemblerelease &&
   mkdir -p /tmp/WORKSPACE/DEPLOY/client/android &&
-  zipalign -p 4 ./build/outputs/apk/release/Minetest-release-unsigned.apk /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk &&
-  mkdir -p ~/apk-signing-key &&
-  apksigner sign --ks ~/apk-signing-key/key.keystore --ks-key-alias key --ks-pass pass:storepass /tmp/WORKSPACE/DEPLOY/client/android/minetest.apk &&
+  cp -r build/libs /tmp/WORKSPACE/DEPLOY/client/android/ &&
   cd ../../..
 }
