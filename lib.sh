@@ -458,7 +458,7 @@ job_capturetheflag(){
   rm -fr capturetheflag
 }
 job_android_install(){
-  local ndk_version=r21b
+  local ndk_version=r21a
   export ANDROID_HOME="$HOME/android-sdk-linux"
   export PATH="$PATH:$ANDROID_HOME/tools/bin"
   export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
