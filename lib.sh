@@ -156,7 +156,7 @@ install_minetest_alpine_builddeps_nosudo(){
 }
 # reference: https://github.com/minetest/minetest/blob/4b6bff46e14c6215828da5ca9ad2cb79aa517a6e/.gitlab-ci.yml
 CONFIG_WIN_ARCH=x86_64
-install_minetest_mingw_builddeps__and__build__ubuntu1604(){
+install_minetest_mingw_builddeps__and__build__ubuntu1804(){
   local WIN_ARCH
   local WIN_BITS
   if [ "$CONFIG_WIN_ARCH" = x86_64 ];then
@@ -168,9 +168,8 @@ install_minetest_mingw_builddeps__and__build__ubuntu1604(){
   fi
   (get_minetest &&
   RETRY sudo apt-get install -y p7zip-full wget unzip git cmake gettext &&
-  RETRY wget --continue "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_7.1.1_ubuntu14.04.7z" -O mingw.7z &&
-  sed -e "s|%PREFIX%|${WIN_ARCH}-w64-mingw32|" -e "s|%ROOTPATH%|/usr/${WIN_ARCH}-w64-mingw32|" < ./minetest/util/travis/toolchain_mingw.cmake.in > ./minetest/util/buildbot/toolchain_mingw.cmake &&
-  sudo 7z x -y -o/usr mingw.7z &&
+  RETRY wget --continue "http://minetest.kitsunemimi.pw/mingw-w64-${WIN_ARCH}_9.2.0_ubuntu18.04.tar.xz" -O mingw.tar.xz &&
+  sudo tar -xaf mingw.tar.xz -C /usr &&
   EXISTING_MINETEST_DIR="$PWD/minetest/" NO_MINETEST_GAME=1 "./minetest/util/buildbot/buildwin${WIN_BITS}.sh" build &&
   unzip ./minetest/_build/minetest-*-win*.zip -d . &&
   mv minetest-*-win* minetest-win &&
@@ -459,11 +458,11 @@ job_capturetheflag(){
   rm -fr capturetheflag
 }
 job_android_install(){
+  local ndk_version=r21b
   export ANDROID_HOME="$HOME/android-sdk-linux"
   export PATH="$PATH:$ANDROID_HOME/tools/bin"
   export ANDROID_NDK_HOME="$HOME/android-ndk-${ndk_version}"
   export PATH="$PATH:$ANDROID_HOME/build-tools/29.0.2"
-  local ndk_version=r21b
   RETRY wget --continue --quiet -O ~/sdk-tools-linux.zip https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip &&
   unzip -q ~/sdk-tools-linux.zip -d ~/android-sdk-linux &&
   rm ~/sdk-tools-linux.zip &&
