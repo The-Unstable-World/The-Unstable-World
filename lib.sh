@@ -474,13 +474,13 @@ job_android_install(){
   echo y | sdkmanager "platforms;android-29"
 }
 job_android_build(){
-  if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias Minetest -storepass storepass;fi
+  #if [ ! -f ~/apk-signing-key/key.keystore ];then yes | keytool -genkey -v -keystore ~/apk-signing-key/key.keystore -keyalg RSA -keysize 2048 -validity 327680 -alias Minetest -storepass storepass;fi
   get_minetest &&
   rm -fr ./minetest/games/minetest_game/.git &&
   echo "ndk.dir = $ANDROID_NDK_HOME" > ./minetest/build/android/local.properties &&
   echo "sdk.dir = $ANDROID_HOME" >> ./minetest/build/android/local.properties &&
-  echo "key.store=$HOME/apk-signing-key/key.keystore" > ./minetest/build/android/ant.properties &&
-  echo "key.alias=Minetest" > ./minetest/build/android/ant.properties &&
+  #echo "key.store=$HOME/apk-signing-key/key.keystore" > ./minetest/build/android/ant.properties &&
+  #echo "key.alias=Minetest" > ./minetest/build/android/ant.properties &&
   cd ./minetest/build/android &&
   ./gradlew assemblerelease &&
   mkdir -p /tmp/WORKSPACE/DEPLOY/client/android &&
