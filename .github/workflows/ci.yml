@@ -307,3 +307,28 @@ jobs:
       with:
         name: i686-windows-client
         path: /tmp/WORKSPACE/DEPLOY
+  android:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      env:
+        cache-name: make-android-happy
+      with:
+        path: ~/apk-signing-key/key.keystore
+        key: android-happy
+        restore-keys: android-happy
+    - uses: actions/setup-java@v1
+      with:
+        java-version: 8
+    - name: Build
+      run: |
+        mkdir -p /tmp/WORKSPACE &&
+        . ./lib.sh &&
+        job_android_install &&
+        job_android_build
+    - name: Publish
+      uses: actions/upload-artifact@v2-preview
+      with:
+        name: android
+        path: /tmp/WORKSPACE/DEPLOY
